@@ -57,3 +57,9 @@ zle -N foreground-current-job
 bindkey -M emacs '^z' foreground-current-job
 bindkey -M viins '^z' foreground-current-job
 bindkey -M vicmd '^z' foreground-current-job
+
+# make folder writable by the webserver
+function wwwwrite () { 
+    sudo setfacl -R -m u:www-data:rwX -m u:`whoami`:rwX $1 && sudo setfacl -dR -m u:www-data:rwx -m u:`whoami`:rwx $1
+}
+
