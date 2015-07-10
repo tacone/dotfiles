@@ -1,0 +1,2 @@
+alias g="git commit -m"
+alias zshrc='vi ~/.zshrc'
