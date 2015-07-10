@@ -1,0 +1,5 @@
+[core]
+	excludesfile = ~/.gitignore
+[user]
+	email = tacone@users.noreply.github.com
+	name = tacone
