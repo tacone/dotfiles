@@ -45,6 +45,7 @@ fi
 # For a full list of active aliases, run `alias`.
 
 alias add-alias='echo "Please insert the new alias:"; read string; echo alias ${string} >> $HOME/.aliases; source $HOME/.aliases'
+alias edit-alias='vi $HOME/.aliases; source $HOME/.aliases'
 
 source $HOME/.aliases
 
