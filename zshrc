@@ -63,3 +63,15 @@ function wwwwrite () {
     sudo setfacl -R -m u:www-data:rwX -m u:`whoami`:rwX $1 && sudo setfacl -dR -m u:www-data:rwx -m u:`whoami`:rwx $1
 }
 
+# completions
+_laravel_get_command_list () {
+	php artisan --no-ansi | sed "1,/Available commands/d" | awk '/^ +[a-z]+/ { print $1 }'
+}
+_laravel () {
+  if [ -f artisan ]; then
+    compadd `_laravel_get_command_list`
+  fi
+}
+compdef _laravel artisan
+alias artisan='php artisan'
+
