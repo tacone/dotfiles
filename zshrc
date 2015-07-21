@@ -90,5 +90,38 @@ alias artisan='php artisan'
 _create_symfony_console_completion artisan
 
 
+# credit https://gist.github.com/wancw/f6d0e6634228cd9e3da3
+
+typeset -gaU preexec_functions
+typeset -gaU precmd_functions
+
+preexec_functions+='preexec_start_timer'
+precmd_functions+='precmd_report_time'
+
+_tr_current_cmd="?"
+_tr_sec_begin="${SECONDS}"
+_tr_ignored="yes"
+
+TIME_REPORT_THRESHOLD=${TIME_REPORT_THRESHOLD:=1}
+
+function preexec_start_timer() {
+    if [[ "x$TTY" != "x" ]]; then
+        _tr_current_cmd="$2"
+        _tr_sec_begin="$SECONDS"
+        _tr_ignored=""
+    fi
+}
+
+function precmd_report_time() {
+    local te
+    te=$((${SECONDS}-${_tr_sec_begin}))
+    if [[ "x${_tr_ignored}" = "x" && $te -gt $TIME_REPORT_THRESHOLD ]] ; then
+        _tr_ignored="yes"
+        echo "\`${_tr_current_cmd}\` completed in ${te} seconds."
+        notify-send "\`${_tr_current_cmd}\` completed in ${te} seconds."
+    fi
+}
+
+
 
 
