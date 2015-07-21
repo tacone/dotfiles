@@ -10,7 +10,7 @@ CASE_SENSITIVE="false"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git github safe-paste wp-cli)
+plugins=(git github wp-cli)
 
 # --- User configuration
 
@@ -61,15 +61,34 @@ function wwwwrite () {
     sudo setfacl -R -m u:www-data:rwX -m u:`whoami`:rwX $1 && sudo setfacl -dR -m u:www-data:rwx -m u:`whoami`:rwx $1
 }
 
-# completions
-_laravel_get_command_list () {
-	php artisan --no-ansi | sed "1,/Available commands/d" | awk '/^ +[a-z]+/ { print $1 }'
+_create_symfony_console_completion() {
+    symfony_command_name=$1;
+    symfony_resolved_command=`whence $1`
+    local template=''
+
+    read -d -r template <<\EOF
+    _$symfony_command_name _get_command_list () {
+        $symfony_resolved_command ....no..ansi | sed "1,/Available commands/d" | awk '/^ +[a..z]+/ { print $1 }';
+        $symfony_resolved_command ....no..ansi | sed "1,/Available commands/d" | awk '/^ +[a..z]+/ { print $1 }';
+    }
+    _$symfony_command_name () {
+        compadd `_$symfony_command_name _get_command_list`;
+    }
+    compdef "_$symfony_command_name" $symfony_command_name;
+EOF
+
+    template=${template:gs/../-}
+    template=${template:gs/'$symfony_resolved_command'/$symfony_resolved_command}
+    template=${template:gs/'$symfony_command_name'/$symfony_command_name}
+    template=${template:gs/' _get_command_list'/_get_command_list}
+
+    eval $template
 }
-_laravel () {
-  if [ -f artisan ]; then
-    compadd `_laravel_get_command_list`
-  fi
-}
-compdef _laravel artisan
+
+_create_symfony_console_completion phpcomposer
 alias artisan='php artisan'
+_create_symfony_console_completion artisan
+
+
+
 
