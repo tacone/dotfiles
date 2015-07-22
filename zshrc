@@ -39,7 +39,7 @@ source $HOME/.aliases
 
 # --- Custom configuration
 
-# have NPM install global packages in the home dir 
+# have NPM install global packages in the home dir
 NPM_PACKAGES="${HOME}/.npm-packages"
 NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
 PATH="$NPM_PACKAGES/bin:$PATH"
@@ -57,7 +57,7 @@ bindkey -M viins '^z' foreground-current-job
 bindkey -M vicmd '^z' foreground-current-job
 
 # make folder writable by the webserver
-function wwwwrite () { 
+function wwwwrite () {
     sudo setfacl -R -m u:www-data:rwX -m u:`whoami`:rwX $1 && sudo setfacl -dR -m u:www-data:rwx -m u:`whoami`:rwx $1
 }
 
@@ -101,8 +101,15 @@ precmd_functions+='precmd_report_time'
 _tr_current_cmd="?"
 _tr_sec_begin="${SECONDS}"
 _tr_ignored="yes"
+_tr_error=0
+_tr_icon_success=/usr/share/icons/hicolor/scalable/apps/im-yahoo.svg
+_tr_icon_fail=/usr/share/icons/hicolor/scalable/apps/apport.svg
 
-TIME_REPORT_THRESHOLD=${TIME_REPORT_THRESHOLD:=1}
+TIME_REPORT_THRESHOLD=${TIME_REPORT_THRESHOLD:=10}
+
+function precmd() {
+  _tr_error=$?
+}
 
 function preexec_start_timer() {
     if [[ "x$TTY" != "x" ]]; then
@@ -114,14 +121,19 @@ function preexec_start_timer() {
 
 function precmd_report_time() {
     local te
+    local icon=${_tr_icon_success}
+    local _status
+
+    if [[ ${_tr_error} != 0 ]] ; then
+      icon=${_tr_icon_fail}
+      _status=" [status: ${_tr_error}]";
+    fi
+
+
     te=$((${SECONDS}-${_tr_sec_begin}))
     if [[ "x${_tr_ignored}" = "x" && $te -gt $TIME_REPORT_THRESHOLD ]] ; then
         _tr_ignored="yes"
-        echo "\`${_tr_current_cmd}\` completed in ${te} seconds."
-        notify-send "\`${_tr_current_cmd}\` completed in ${te} seconds."
+        echo "\n\`${_tr_current_cmd}\` completed in ${te} seconds."
+        notify-send \`${_tr_current_cmd}\` "completed in <b>${te}</b> seconds.${_status}" -i ${icon}
     fi
 }
-
-
-
-
