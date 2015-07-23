@@ -61,6 +61,8 @@ NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
 #PATH="$NPM_PACKAGES/bin:$PATH"
 unset MANPATH # delete if you already modified MANPATH elsewhere in your config
 MANPATH="$NPM_PACKAGES/share/man:$(manpath)"
+# add npm completions
+type npm > /dev/null && eval "$(npm completion 2>/dev/null)"
 
 
 # --- Utility functions
