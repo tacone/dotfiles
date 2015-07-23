@@ -14,31 +14,52 @@ plugins=(git github wp-cli)
 
 # --- User configuration
 
-export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/jvm/java-8-oracle/bin:/usr/lib/jvm/java-8-oracle/db/bin:/usr/lib/jvm/java-8-oracle/jre/bin"
-# export MANPATH="/usr/local/man:$MANPATH"
-
-source $ZSH/oh-my-zsh.sh
-
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
 export EDITOR='vim'
 
+export PATH="$HOME/.bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/jvm/java-8-oracle/bin:/usr/lib/jvm/java-8-oracle/db/bin:/usr/lib/jvm/java-8-oracle/jre/bin"
+
+# export MANPATH="/usr/local/man:$MANPATH"
+
+source $ZSH/oh-my-zsh.sh
+
 # --- Aliases
 
 alias add-alias='echo "Please insert the new alias:"; read string; echo alias ${string} >> $HOME/.aliases; source $HOME/.aliases'
-alias edit-alias='vi $HOME/.aliases; source $HOME/.aliases'
+alias edit-alias='$EDITOR $HOME/.aliases; source $HOME/.aliases'
 
 # please add custom aliases in the file below insted
 source $HOME/.aliases
+
+
+_refresh_paths='export PATH=$STANDARD_PATH; [[ -f $HOME/.paths ]] && source $HOME/.paths;';
+
+#export PATH=$STANDARD_PATH;
+#[[ -f $HOME/.paths ]] && source $HOME/.paths;
+
+function add-path (){
+  local normpath
+
+  # expand the path (for example `~` -> `/home/youruser`)
+  normpath=${~1}
+  # transform into absolute path
+  normpath=${normpath:a}
+
+  normpath=$(echo $normpath | sed "s|$HOME|"'$HOME|')
+  echo 'export PATH='"$normpath"':$PATH' >> $HOME/.paths;
+  eval $_refresh_paths
+}
+alias edit-path='$EDITOR $HOME/.paths; eval $_refresh_paths'
 
 # --- Custom configuration
 
 # have NPM install global packages in the home dir
 NPM_PACKAGES="${HOME}/.npm-packages"
 NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
-PATH="$NPM_PACKAGES/bin:$PATH"
+#PATH="$NPM_PACKAGES/bin:$PATH"
 unset MANPATH # delete if you already modified MANPATH elsewhere in your config
 MANPATH="$NPM_PACKAGES/share/man:$(manpath)"
 
@@ -133,3 +154,7 @@ function precmd_report_time() {
         notify-send \`${_tr_current_cmd}\` "completed in <b>${te}</b> seconds.${_status}" -i ${icon}
     fi
 }
+
+# --- the end section
+export STANDARD_PATH=$PATH
+eval $_refresh_paths
