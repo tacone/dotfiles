@@ -10,7 +10,7 @@ CASE_SENSITIVE="false"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git github wp-cli)
+plugins=(git wp-cli)
 
 # --- User configuration
 
