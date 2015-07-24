@@ -58,7 +58,7 @@ alias edit-path='$EDITOR $HOME/.paths; eval $_refresh_paths'
 # have NPM install global packages in the home dir
 NPM_PACKAGES="${HOME}/.npm-packages"
 NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
-#PATH="$NPM_PACKAGES/bin:$PATH"
+PATH="$NPM_PACKAGES/bin:$PATH"
 unset MANPATH # delete if you already modified MANPATH elsewhere in your config
 MANPATH="$NPM_PACKAGES/share/man:$(manpath)"
 # add npm completions
