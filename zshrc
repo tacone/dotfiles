@@ -7,7 +7,7 @@ ZSH_THEME="ys"
 CASE_SENSITIVE="false"
 
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git wp-cli)
+plugins=(git wp-cli z)
 
 source $HOME/.dotfiles/.zsh-plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
