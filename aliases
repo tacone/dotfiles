@@ -3,3 +3,4 @@ alias zshrc='vi ~/.zshrc'
 alias fname="noglob find -name"
 alias -g each='-print0 | xargs -0 -I {}'
 alias gh='github'
+alias youtube-dl='youtube-dl --embed-thumbnail -x -i'
