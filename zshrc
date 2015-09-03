@@ -79,6 +79,10 @@ function wwwwrite () {
     sudo setfacl -R -m u:www-data:rwX -m u:`whoami`:rwX $1 && sudo setfacl -dR -m u:www-data:rwx -m u:`whoami`:rwx $1
 }
 
+function gh() {
+    git clone https://github.com/${1}.git ${@:2}
+}
+
 _create_symfony_console_completion() {
     symfony_command_name=$1;
     symfony_resolved_command=`whence $1`
