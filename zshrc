@@ -9,8 +9,6 @@ CASE_SENSITIVE="false"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 plugins=(git wp-cli z)
 
-source $HOME/.dotfiles/.zsh-plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
 # --- User configuration
 
 # You may need to manually set your language environment
@@ -112,6 +110,27 @@ alias artisan='php artisan'
 _create_symfony_console_completion artisan
 
 
+ask-yn()
+{
+    while true; do
+        echo -n $1
+        if [[ -n "$2" ]]; then
+            [[ $2 == 0 ]] && echo -n " (y/N)" || echo -n " (Y/n)"
+        else
+            echo -n " (y/n)"
+        fi
+        echo -n " "
+        read ret
+        case ${ret} in
+            yes|Yes|y|Y) return 0;;
+            no|No|n|N)   return 1;;
+            "") [[ -n $2 ]] && { [[ $2 != 0 ]] && return 0 || return 1 };;
+        esac
+    done
+}
+
+
+
 # credit https://gist.github.com/wancw/f6d0e6634228cd9e3da3
 
 typeset -gaU preexec_functions
@@ -159,6 +178,11 @@ function precmd_report_time() {
         notify-send \`${_tr_current_cmd}\` "completed in <b>${te}</b> seconds.${_status}" -i ${icon}
     fi
 }
+
+# --- include custom plugins
+
+source $HOME/.dotfiles/.zsh-plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source $HOME/.dotfiles/.zsh-plugins/mysql-import/mysql-import.zsh
 
 # --- the end section
 export STANDARD_PATH=$PATH
