@@ -7,7 +7,7 @@ ZSH_THEME="ys"
 CASE_SENSITIVE="false"
 
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git wp-cli z)
+plugins=(git wp-cli z thefuck)
 
 # --- User configuration
 
