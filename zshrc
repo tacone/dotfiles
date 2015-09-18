@@ -81,6 +81,11 @@ function gh() {
     git clone https://github.com/${1}.git ${@:2}
 }
 
+function filewatch() {
+   while inotifywait ${~1}; do ${@:2}; done;
+}
+alias filewatch='noglob filewatch'
+
 _create_symfony_console_completion() {
     symfony_command_name=$1;
     symfony_resolved_command=`whence $1`
