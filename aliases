@@ -3,4 +3,5 @@ alias zshrc='vi ~/.zshrc'
 alias fname="noglob find -name"
 alias -g each='-print0 | xargs -0 -I {}'
 alias youtube-dl='youtube-dl --embed-thumbnail -x -i'
+alias m='$HOME/Applications/meteor/meteor'
 alias own='sudo chown `whoami`:`whoami`'
