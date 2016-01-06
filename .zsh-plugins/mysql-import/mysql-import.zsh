@@ -70,7 +70,7 @@ function mysql-export() {
   USAGE="Usage: mysql-export [FOLDER] [other mysql options...]"
 
   if [ ! -d "$FOLDER" ]; then
-    echo "Folder \"$IMPORT_FILE\" has not been found. Please review the usage:";
+    echo "Folder \"$FOLDER\" has not been found. Please review the usage:";
     echo ;
     echo $USAGE;
     return 1;
