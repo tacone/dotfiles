@@ -63,3 +63,30 @@ function mysql-import() {
   fi;
   echo "done"
 }
+
+function mysql-export() {
+  FOLDER=$1
+  OPTS=${@:2}
+  USAGE="Usage: mysql-export [FOLDER] [other mysql options...]"
+
+  if [ ! -d "$FOLDER" ]; then
+    echo "Folder \"$IMPORT_FILE\" has not been found. Please review the usage:";
+    echo ;
+    echo $USAGE;
+    return 1;
+  fi
+
+  TIMESTAMP=`date +%Y-%m-%d_%H-%M-%S`;
+  echo "Starting MySQL backup";
+  echo ;
+
+  databases=($(mysql ${=OPTS} -e "SHOW DATABASES;" | tr -d "| " | grep -Ev "(Database|information_schema|performance_schema)"));
+
+  for DB in $databases; do
+    echo "- backing up $DB to $FOLDER/$DB-$TIMESTAMP.sql.gz"
+          mysqldump ${=OPTS} $DB > $FOLDER/$DB-$TIMESTAMP.sql
+          gzip $FOLDER/$DB-$TIMESTAMP.sql
+  done
+  echo ;
+  echo "done";
+}
