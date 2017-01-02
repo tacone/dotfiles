@@ -30,6 +30,8 @@ alias edit-alias='$EDITOR $HOME/.aliases; source $HOME/.aliases'
 
 # please add custom aliases in the file below insted
 source $HOME/.aliases
+test -f $HOME/.custom-aliases || touch $HOME/.custom-aliases
+source $HOME/.custom-aliases
 
 
 _refresh_paths='export PATH=$STANDARD_PATH; [[ -f $HOME/.paths ]] && source $HOME/.paths;';
@@ -184,7 +186,9 @@ function precmd_report_time() {
     if [[ "x${_tr_ignored}" = "x" && $te -gt $TIME_REPORT_THRESHOLD ]] ; then
         _tr_ignored="yes"
         echo "\n\`${_tr_current_cmd}\` completed in ${te} seconds."
-        notify-send \`${_tr_current_cmd}\` "completed in <b>${te}</b> seconds.${_status}" -i ${icon}
+	if type notify-send > /dev/null; then
+        	notify-send \`${_tr_current_cmd}\` "completed in <b>${te}</b> seconds.${_status}" -i ${icon}
+	fi
     fi
 }
 
