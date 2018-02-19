@@ -120,7 +120,6 @@ _create_symfony_console_completion phpcomposer
 alias artisan='php artisan'
 _create_symfony_console_completion artisan
 
-
 ask-yn()
 {
     while true; do
