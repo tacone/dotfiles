@@ -82,6 +82,11 @@ function wwwwrite () {
 function gh() {
     git clone https://github.com/${1}.git ${@:2}
 }
+
+function gitignore.io() { 
+	curl -L -s https://www.gitignore.io/api/$@ ;
+}
+
 function bb() {
     git clone https://bitbucket.org/${1}.git ${@:2}
 }
