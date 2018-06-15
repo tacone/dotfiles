@@ -15,6 +15,10 @@ sudo apt-get install inotify-tools
 
 sudo apt-get install vim
 
+# --- grc (command output highlighting)
+
+sudo apt-get install grc
+
 # set up symlinks
 
 sudo add-apt-repository ppa:martin-frost/thoughtbot-rcm

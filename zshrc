@@ -33,6 +33,8 @@ source $HOME/.aliases
 test -f $HOME/.custom-aliases || touch $HOME/.custom-aliases
 source $HOME/.custom-aliases
 
+[[ -s "/etc/grc.zsh" ]] && source /etc/grc.zsh
+alias ls='ls --color=tty' # combine grc with native coloring
 
 _refresh_paths='export PATH=$STANDARD_PATH; [[ -f $HOME/.paths ]] && source $HOME/.paths;';
 
