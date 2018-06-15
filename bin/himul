@@ -1,0 +1,41 @@
+#!/usr/bin/env python
+
+# Author  : Kirubakaran Athmanathan
+# Created : Mar 29, 2013
+
+# Highlights multiple string matches in different colors
+
+import os
+import sys
+from optparse import OptionParser
+from subprocess import Popen, PIPE, STDOUT
+
+parser = OptionParser()
+(options, args) = parser.parse_args()
+
+colors = [
+    ('red','01;31'),
+    ('green','01;32'),
+    ('yellow','01;33'),
+    ('blue','01;34'),
+    ('magenta','01;35'),
+    ('cyan','01;36'),
+    ]
+
+if len(args) > 0:
+    op = sys.stdin.read()
+    for i,srch in enumerate(args):
+        color = colors[i%len(colors)][1]
+        env=os.environ.copy()
+        env['GREP_COLORS'] = "mt="+color
+        p = Popen(["egrep", srch+"|", "--color=always"],
+                  stdout=PIPE, stdin=PIPE, stderr=STDOUT, env=env)
+        op = p.communicate(input=op)[0]
+    print(op)
+else:
+    print("Sample usage of himul:")
+    hibegin,hiend = '\033[92m','\033[0m'
+    print("curl http://code.jquery.com/jquery-1.9.1.min.js | " +
+          hibegin + "himul var this offset css" + hiend +
+          " | less -R")
+
