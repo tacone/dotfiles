@@ -61,6 +61,19 @@ function add-path (){
 }
 alias edit-path='$EDITOR $HOME/.paths; eval $_refresh_paths'
 
+# --- Exclude some commands from the history
+
+function zshaddhistory() {
+    emulate -L zsh
+    if [[ $1 != "howdoi"* ]] ; then
+        print -sr -- "${1%%$'\n'}"
+        fc -p
+    else
+        return 1
+    fi
+}
+
+
 # --- Custom configuration
 
 # have NPM install global packages in the home dir
