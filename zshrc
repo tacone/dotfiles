@@ -17,7 +17,7 @@ plugins=(git wp-cli z colored-man-pages)
 # Preferred editor for local and remote sessions
 export EDITOR='vim'
 
-export PATH="$HOME/.bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/jvm/java-8-oracle/bin:/usr/lib/jvm/java-8-oracle/db/bin:/usr/lib/jvm/java-8-oracle/jre/bin"
+export PATH="$HOME/.bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/jvm/java-8-oracle/bin:/usr/lib/jvm/java-8-oracle/db/bin:/usr/lib/jvm/java-8-oracle/jre/bin:/home/stefano/.local/bin"
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
@@ -33,8 +33,12 @@ source $HOME/.aliases
 test -f $HOME/.custom-aliases || touch $HOME/.custom-aliases
 source $HOME/.custom-aliases
 
-[[ -s "/etc/grc.zsh" ]] && source /etc/grc.zsh
+# --- output highlighting for common commands
+
+[[ -s "/etc/grc.conf" ]] && source $HOME/.dotfiles/.zsh-plugins/grc/grc.zsh
 alias ls='ls --color=tty' # combine grc with native coloring
+
+# --- Paths
 
 _refresh_paths='export PATH=$STANDARD_PATH; [[ -f $HOME/.paths ]] && source $HOME/.paths;';
 
