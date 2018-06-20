@@ -19,6 +19,10 @@ sudo apt-get install vim
 
 sudo apt-get install grc
 
+# --- howdoi
+
+pip3 install howdoi
+
 # set up symlinks
 
 sudo add-apt-repository ppa:martin-frost/thoughtbot-rcm

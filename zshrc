@@ -35,9 +35,11 @@ source $HOME/.custom-aliases
 
 # --- output highlighting for common commands
 
+alias sudo='sudo '
 [[ -s "/etc/grc.conf" ]] && source $HOME/.dotfiles/.zsh-plugins/grc/grc.zsh
-alias ls='ls --color=tty' # combine grc with native coloring
-
+alias ls='grc --colour=auto ls --color=always' # combine grc with native coloring
+alias dmesg='dmesg --reltime --color'
+alias howdoi='howdoi -c'
 # --- Paths
 
 _refresh_paths='export PATH=$STANDARD_PATH; [[ -f $HOME/.paths ]] && source $HOME/.paths;';
