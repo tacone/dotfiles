@@ -1,13 +1,13 @@
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
-
+export ZSH_CUSTOM=$HOME/.dotfiles/.zsh-plugins
 # Set name of the theme to load.
 ZSH_THEME="ys"
 # Uncomment the following line to use case-sensitive completion.
 CASE_SENSITIVE="false"
 
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git wp-cli z colored-man-pages)
+plugins=(git wp-cli z colored-man-pages meteor)
 
 # --- User configuration
 
@@ -24,6 +24,9 @@ export PATH="$HOME/.bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:
 source $ZSH/oh-my-zsh.sh
 
 # --- Aliases
+
+# remove meteor aliases
+for i in `alias | grep meteor | cut -d= -f1 `; do alias $i=; done
 
 alias add-alias='echo "Please insert the new alias:"; read string; echo alias ${string} >> $HOME/.aliases; source $HOME/.aliases'
 alias edit-alias='$EDITOR $HOME/.aliases; source $HOME/.aliases'
@@ -85,7 +88,6 @@ unset MANPATH # delete if you already modified MANPATH elsewhere in your config
 MANPATH="$NPM_PACKAGES/share/man:$(manpath)"
 # add npm completions
 type npm > /dev/null && eval "$(npm completion 2>/dev/null)"
-
 
 # --- Utility functions
 
@@ -222,6 +224,8 @@ function precmd_report_time() {
 
 source $HOME/.dotfiles/.zsh-plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source $HOME/.dotfiles/.zsh-plugins/mysql-import/mysql-import.zsh
+
+autoload -U compaudit compinit
 
 # --- the end section
 export STANDARD_PATH=$PATH
