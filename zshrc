@@ -18,6 +18,13 @@ plugins=(git wp-cli z colored-man-pages meteor)
 export EDITOR='vim'
 
 export PATH="$HOME/.bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/jvm/java-8-oracle/bin:/usr/lib/jvm/java-8-oracle/db/bin:/usr/lib/jvm/java-8-oracle/jre/bin:/home/stefano/.local/bin"
+# have NPM install global packages in the home dir
+NPM_PACKAGES="${HOME}/.npm-packages"
+NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
+PATH="$NPM_PACKAGES/bin:$PATH"
+unset MANPATH # delete if you already modified MANPATH elsewhere in your config
+MANPATH="$NPM_PACKAGES/share/man:$(manpath)"
+# add npm completions
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
@@ -40,10 +47,12 @@ source $HOME/.custom-aliases
 
 alias sudo='sudo '
 [[ -s "/etc/grc.conf" ]] && source $HOME/.dotfiles/.zsh-plugins/grc/grc.zsh
+type "all-the-package-names" > /dev/null && source $HOME/.dotfiles/.zsh-plugins/zsh-better-npm-completion/zsh-better-npm-completion.plugin.zsh
 type "docker-machine" > /dev/null && source $HOME/.dotfiles/.zsh-plugins/docker-machine-completion/docker-machine-completion.zsh
-alias ls='grc --colour=auto ls --color=always' # combine grc with native coloring
+[[ -s "/etc/grc.conf" ]] && alias ls='grc --colour=auto ls --color=always' # combine grc with native coloring
 alias dmesg='dmesg --reltime --color'
 alias howdoi='howdoi -c'
+type "code-insiders" > /dev/null && alias code=code-insiders
 # --- Paths
 
 _refresh_paths='export PATH=$STANDARD_PATH; [[ -f $HOME/.paths ]] && source $HOME/.paths;';
@@ -80,15 +89,6 @@ function zshaddhistory() {
 
 # --- Custom configuration
 
-# have NPM install global packages in the home dir
-NPM_PACKAGES="${HOME}/.npm-packages"
-NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
-PATH="$NPM_PACKAGES/bin:$PATH"
-unset MANPATH # delete if you already modified MANPATH elsewhere in your config
-MANPATH="$NPM_PACKAGES/share/man:$(manpath)"
-# add npm completions
-type npm > /dev/null && eval "$(npm completion 2>/dev/null)"
-
 # --- Utility functions
 
 # ^Z to foreground the last suspended job.
@@ -107,7 +107,7 @@ function gh() {
     git clone https://github.com/${1}.git ${@:2}
 }
 
-function gitignore.io() { 
+function gitignore.io() {
 	curl -L -s https://www.gitignore.io/api/$@ ;
 }
 
