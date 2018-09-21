@@ -118,6 +118,16 @@ function zshaddhistory() {
 
 # --- Utility functions
 
+# Alt+S to insert sudo at the beginning of the line
+
+insert_sudo () {
+    local prefix="sudo"
+    BUFFER="$prefix $BUFFER"
+    CURSOR=$(($CURSOR + $#prefix + 1))
+}
+zle -N insert-sudo insert_sudo
+bindkey "^[s" insert-sudo
+
 # ^Z to foreground the last suspended job.
 foreground-current-job() { fg; }
 zle -N foreground-current-job
