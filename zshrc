@@ -7,7 +7,7 @@ ZSH_THEME="ys"
 CASE_SENSITIVE="false"
 
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git wp-cli z colored-man-pages meteor)
+plugins=(git wp-cli z colored-man-pages meteor nmap)
 
 # --- User configuration
 
@@ -24,7 +24,6 @@ NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
 PATH="$NPM_PACKAGES/bin:$PATH"
 unset MANPATH # delete if you already modified MANPATH elsewhere in your config
 MANPATH="$NPM_PACKAGES/share/man:$(manpath)"
-# add npm completions
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
@@ -47,12 +46,40 @@ source $HOME/.custom-aliases
 
 alias sudo='sudo '
 [[ -s "/etc/grc.conf" ]] && source $HOME/.dotfiles/.zsh-plugins/grc/grc.zsh
-type "all-the-package-names" > /dev/null && source $HOME/.dotfiles/.zsh-plugins/zsh-better-npm-completion/zsh-better-npm-completion.plugin.zsh
 type "docker-machine" > /dev/null && source $HOME/.dotfiles/.zsh-plugins/docker-machine-completion/docker-machine-completion.zsh
 [[ -s "/etc/grc.conf" ]] && alias ls='grc --colour=auto ls --color=always' # combine grc with native coloring
 alias dmesg='dmesg --reltime --color'
 alias howdoi='howdoi -c'
 type "code-insiders" > /dev/null && alias code=code-insiders
+
+# --- autocomplete npm packages
+
+type "all-the-package-names" > /dev/null && source $HOME/.dotfiles/.zsh-plugins/zsh-better-npm-completion/zsh-better-npm-completion.plugin.zsh
+
+# --- docker-compose / docker exec aliases
+#!/usr/bin/zsh
+
+function Ð() {
+    if [[ $# -eq 0 ]]; then
+        docker-compose ps
+    else
+        local line_number=`expr 2 + $1`
+        local machine_name=`docker-compose ps | tail -n+$line_number | head -n1 | cut -f1 -d ' '`
+        docker exec -it $machine_name ${@:2}
+    fi
+}
+
+alias Ð1='Ð 1'
+alias Ð2='Ð 2'
+alias Ð3='Ð 3'
+alias Ð4='Ð 4'
+alias Ð5='Ð 5'
+alias Ð6='Ð 6'
+alias Ð7='Ð 7'
+alias Ð8='Ð 8'
+alias Ð9='Ð 9'
+alias Ð10='Ð 10'
+
 # --- Paths
 
 _refresh_paths='export PATH=$STANDARD_PATH; [[ -f $HOME/.paths ]] && source $HOME/.paths;';
