@@ -58,8 +58,14 @@ type "code-insiders" > /dev/null && alias code=code-insiders
 
 type "all-the-package-names" > /dev/null && source $HOME/.dotfiles/.zsh-plugins/zsh-better-npm-completion/zsh-better-npm-completion.plugin.zsh
 
+# --- autocomplete kill
+
+zstyle ':completion:*:*:kill:*' menu yes select
+zstyle ':completion:*:kill:*' force-list always
+zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
+zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
+
 # --- docker-compose / docker exec aliases
-#!/usr/bin/zsh
 
 function Ð() {
     if [[ $# -eq 0 ]]; then
@@ -119,6 +125,14 @@ function zshaddhistory() {
 # --- Custom configuration
 
 # --- Utility functions
+
+# --- Use "+"" to pick and autocompleted item without closing
+#     the completions menu
+bindkey -M menuselect "+" accept-and-menu-complete
+
+# --- Esc + H to access the man page of the current command
+# (ex: git commit<Esc+h>)
+autoload run-help
 
 # Alt+S to insert sudo at the beginning of the line
 
