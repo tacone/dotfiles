@@ -209,8 +209,6 @@ _tr_current_cmd="?"
 _tr_sec_begin="${SECONDS}"
 _tr_ignored="yes"
 _tr_error=0
-_tr_icon_success=/usr/share/icons/hicolor/scalable/apps/im-yahoo.svg
-_tr_icon_fail=/usr/share/icons/hicolor/scalable/apps/apport.svg
 
 TIME_REPORT_THRESHOLD=${TIME_REPORT_THRESHOLD:=10}
 
@@ -228,11 +226,11 @@ function preexec_start_timer() {
 
 function precmd_report_time() {
     local te
-    local icon=${_tr_icon_success}
+    local icon=😎
     local _status
 
     if [[ ${_tr_error} != 0 ]] ; then
-      icon=${_tr_icon_fail}
+      icon='🔴'
       _status=" [status: ${_tr_error}]";
     fi
 
@@ -240,9 +238,9 @@ function precmd_report_time() {
     te=$((${SECONDS}-${_tr_sec_begin}))
     if [[ "x${_tr_ignored}" = "x" && $te -gt $TIME_REPORT_THRESHOLD ]] ; then
         _tr_ignored="yes"
-        echo "\n\`${_tr_current_cmd}\` completed in ${te} seconds."
+        echo "\n${icon} \`${_tr_current_cmd}\` completed in ${te} seconds."
 	if type notify-send > /dev/null; then
-        	notify-send \`${_tr_current_cmd}\` "completed in <b>${te}</b> seconds.${_status}" -i ${icon}
+        	notify-send "${icon} \`${_tr_current_cmd}\` completed in <b>${te}</b> seconds.${_status}"
 	fi
     fi
 }
