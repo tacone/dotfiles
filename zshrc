@@ -31,6 +31,8 @@ source $ZSH/oh-my-zsh.sh
 
 # --- Aliases
 
+alias csv='column -n -s , -t'
+
 # remove meteor aliases
 for i in `alias | grep meteor | cut -d= -f1 `; do alias $i=; done
 
