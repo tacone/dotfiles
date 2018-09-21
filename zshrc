@@ -49,7 +49,8 @@ source $HOME/.custom-aliases
 alias sudo='sudo '
 [[ -s "/etc/grc.conf" ]] && source $HOME/.dotfiles/.zsh-plugins/grc/grc.zsh
 type "docker-machine" > /dev/null && source $HOME/.dotfiles/.zsh-plugins/docker-machine-completion/docker-machine-completion.zsh
-[[ -s "/etc/grc.conf" ]] && alias ls='grc --colour=auto ls --color=always' # combine grc with native coloring
+# combine grc with native coloring and make ls output clickable hyperlinks
+[[ -s "/etc/grc.conf" ]] && alias ls='grc --colour=auto ls --color=always --hyperlink=always'
 alias dmesg='dmesg --reltime --color'
 alias howdoi='howdoi -c'
 type "code-insiders" > /dev/null && alias code=code-insiders
