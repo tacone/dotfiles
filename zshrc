@@ -7,7 +7,7 @@ ZSH_THEME="ys"
 CASE_SENSITIVE="false"
 
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git wp-cli z colored-man-pages meteor nmap)
+plugins=(git wp-cli z colored-man-pages meteor nmap command-not-found)
 
 # --- User configuration
 
