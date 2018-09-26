@@ -73,7 +73,10 @@ function Ð() {
         docker-compose ps
     else
         local line_number=`expr 2 + $1`
-        local machine_name=`docker-compose ps | tail -n+$line_number | head -n1 | cut -f1 -d ' '`
+        # we pipe echo to avoid docker-compose detecting the width of the terminal
+        # because it would wrap long lines making tail | head ineffective
+        local machine_name=`echo '' | docker-compose ps | tail -n+$line_number | head -n1 | cut -f1 -d ' '`
+        [[ -z $2 ]] && 2=bash
         docker exec -it $machine_name ${@:2}
     fi
 }
@@ -171,9 +174,10 @@ function bb() {
 
 
 function filewatch() {
-   while inotifywait ${~1}; do ${@:2}; done;
+    echo "${@:2}"
+   "${@:2}"
+   while inotifywait -e close_write ${~1}; do ${@:2}; done;
 }
-alias filewatch='noglob filewatch'
 
 _create_symfony_console_completion() {
     symfony_command_name=$1;
