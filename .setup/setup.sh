@@ -29,3 +29,11 @@ sudo add-apt-repository ppa:martin-frost/thoughtbot-rcm
 sudo apt-get update && sudo apt-get install rcm
 
 rcup -v
+
+# node!
+
+wget -qO- https://deb.nodesource.com/setup_10.x | sudo -E bash -
+sudo apt-get update
+sudo apt-get install -y nodejs
+
+npm install -g npm-check-updates
