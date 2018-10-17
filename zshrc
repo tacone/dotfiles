@@ -92,6 +92,14 @@ alias Ð8='Ð 8'
 alias Ð9='Ð 9'
 alias Ð10='Ð 10'
 
+alias docker-list-dangling-images='docker images -f dangling=true'
+alias docker-remove-dangling-images='docker rmi $(docker images -q -f dangling=true)'
+alias docker-list-stopped-containers='docker ps -a -f status=exited'
+alias docker-remove-stopped-containers='docker rm $(docker ps -a -q -f status=exited)'
+alias docker-list-dangling-volumes='docker volume ls -f dangling=true'
+alias docker-remove-dangling-volumes='docker volume rm $(docker volume ls -q -f dangling=true)'
+
+
 # --- Paths
 
 _refresh_paths='export PATH=$STANDARD_PATH; [[ -f $HOME/.paths ]] && source $HOME/.paths;';
