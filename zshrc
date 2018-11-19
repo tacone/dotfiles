@@ -300,3 +300,5 @@ if [ -f /etc/profile.d/vte-2.91.sh ]; then
     source /etc/profile.d/vte-2.91.sh
 fi
 
+
+export PATH=/home/stefano/.local/bin:$PATH
