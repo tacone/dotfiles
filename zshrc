@@ -18,6 +18,9 @@ plugins=(git wp-cli z colored-man-pages meteor nmap command-not-found)
 export EDITOR='vim'
 
 export PATH="$HOME/.bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/jvm/java-8-oracle/bin:/usr/lib/jvm/java-8-oracle/db/bin:/usr/lib/jvm/java-8-oracle/jre/bin:/home/stefano/.local/bin"
+if [[ -r "$HOME/.zprofile" ]]; then
+        source "$HOME/.zprofile"
+fi
 # have NPM install global packages in the home dir
 NPM_PACKAGES="${HOME}/.npm-packages"
 NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
