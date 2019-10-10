@@ -185,10 +185,29 @@ function bb() {
 
 
 function filewatch() {
+    # TODO: kill process upon repeat
+    # TODO: optional notify-send
     echo "${@:2}"
    "${@:2}"
    while inotifywait -e close_write ${~1}; do ${@:2}; done;
 }
+
+
+function filewatch2() {
+    # TODO: kill process upon repeat
+    # TODO: optional notify-send
+   "${@:2}" &
+   PID=$!
+   echo "$PID - ${@:2}"
+   while inotifywait -e close_write ${~1}; do
+       kill $PID
+       wait $PID
+       ${@:2};
+   done;
+   kill $PID
+   wait $PID
+}
+
 
 _create_symfony_console_completion() {
     symfony_command_name=$1;
