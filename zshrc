@@ -95,6 +95,10 @@ alias Ð8='Ð 8'
 alias Ð9='Ð 9'
 alias Ð10='Ð 10'
 
+# --- easy xargs
+alias -g »='| xargs -n1 -d "\n"'
+alias -g »»='| xargs -n1 -I{} -d "\n"'
+
 alias docker-list-dangling-images='docker images -f dangling=true'
 alias docker-remove-dangling-images='docker rmi $(docker images -q -f dangling=true)'
 alias docker-list-stopped-containers='docker ps -a -f status=exited'
@@ -182,7 +186,6 @@ function gitignore.io() {
 function bb() {
     git clone https://bitbucket.org/${1}.git ${@:2}
 }
-
 
 function filewatch() {
     # TODO: kill process upon repeat
