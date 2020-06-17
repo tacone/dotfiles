@@ -53,7 +53,7 @@ alias sudo='sudo '
 [[ -s "/etc/grc.conf" ]] && source $HOME/.dotfiles/.zsh-plugins/grc/grc.zsh
 type "docker-machine" > /dev/null && source $HOME/.dotfiles/.zsh-plugins/docker-machine-completion/docker-machine-completion.zsh
 # combine grc with native coloring and make ls output clickable hyperlinks
-[[ -s "/etc/grc.conf" ]] && alias ls='grc --colour=auto ls --color=always --hyperlink=always'
+[[ -s "/etc/grc.conf" ]] && alias ll='grc --colour=auto ls -lh --color=always --hyperlink=always'
 alias dmesg='dmesg --reltime --color'
 alias howdoi='howdoi -c'
 type "code-insiders" > /dev/null && alias code=code-insiders
@@ -98,6 +98,9 @@ alias Ð10='Ð 10'
 # --- easy xargs
 alias -g »='| xargs -n1 -d "\n"'
 alias -g »»='| xargs -n1 -I{} -d "\n"'
+
+# --- easy grep (altgr + shift + s)
+alias -g §=' | grep -i '
 
 alias docker-list-dangling-images='docker images -f dangling=true'
 alias docker-remove-dangling-images='docker rmi $(docker images -q -f dangling=true)'
