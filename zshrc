@@ -152,7 +152,10 @@ function zshaddhistory() {
 #     the completions menu
 bindkey -M menuselect "+" accept-and-menu-complete
 
-# --- Esc + H to access the man page of the current command
+# --- Alt + L to run ll
+bindkey -s '\el' 'll\n'
+
+# --- Alt + H to access the man page of the current command
 # (ex: git commit<Esc+h>)
 autoload run-help
 
