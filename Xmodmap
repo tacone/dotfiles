@@ -1,0 +1,23 @@
+keycode 66 = Mode_switch
+
+keysym i = i I Up I rightarrow idotless rightarrow
+keysym j = j J Left J dead_hook dead_horn dead_hook
+keysym k = k K Down K kra ampersand kra
+keysym l = l L Right L lstroke Lstroke lstroke
+
+keysym u = u U Home U downarrow uparrow downarrow
+keysym o = o O End O oslash Oslash oslash
+! keysym h = h H Home H hstroke Hstroke hstroke
+! keycode 47 = ograve ccedilla End ccedilla at dead_cedilla at dead_cedilla
+
+keysym n = n N BackSpace N ntilde Ntilde ntilde Ntilde n N ntilde Ntilde
+keysym m = m M Delete M mu masculine mu masculine m M mu masculine m M mu masculine
+
+keycode  25 = w W Up W lstroke Lstroke lstroke
+keycode  38 = a A Left A ae AE ae
+keycode  39 = s S Down S ssharp section ssharp
+keycode  40 = d D Right D eth ETH eth
+keycode  24 = q Q Home Q at Greek_OMEGA at
+keycode  26 = e E End E EuroSign cent EuroSign
+
+keycode  65 = space NoSymbol Return
