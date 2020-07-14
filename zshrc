@@ -1,6 +1,7 @@
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 export ZSH_CUSTOM=$HOME/.dotfiles/.zsh-plugins
+
 # Set name of the theme to load.
 ZSH_THEME="ys"
 # Uncomment the following line to use case-sensitive completion.
@@ -163,6 +164,12 @@ bindkey -s '\eX' ' | xargs -n1 -d "\\n" -I {} '
 bindkey -s '\ef' 'find . -name '\''*.*'\'
 # --- Alt + s to sed -s s///g
 bindkey -s '\es' ' | sed -s '\''s///g'\'
+# --- Alt + t to tail -n1000 -f
+bindkey -s '\et' ' | tail -n1000 -f'
+# --- Alt + c to count with wc -l
+bindkey -s '\ec' ' | wc -l'
+# --- Alt + o to git checkout
+bindkey -s '\eo' 'git checkout '
 
 
 # --- Alt + H to access the man page of the current command
