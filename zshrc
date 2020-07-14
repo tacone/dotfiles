@@ -152,8 +152,18 @@ function zshaddhistory() {
 #     the completions menu
 bindkey -M menuselect "+" accept-and-menu-complete
 
-# --- Alt + L to run ll
-bindkey -s '\el' 'll\n'
+# --- Alt + l to write ll
+bindkey -s '\el' 'ls -1 '
+# --- Alt + s to pipe in grep
+bindkey -s '\eg' ' | grep -i '
+# --- Alt + x/X to pipe in xargs
+bindkey -s '\ex' ' | xargs -n1 -d "\\n" '
+bindkey -s '\eX' ' | xargs -n1 -d "\\n" -I {} '
+# --- Alt + f to find -name
+bindkey -s '\ef' 'find . -name '\''*.*'\'
+# --- Alt + s to sed -s s///g
+bindkey -s '\es' ' | sed -s '\''s///g'\'
+
 
 # --- Alt + H to access the man page of the current command
 # (ex: git commit<Esc+h>)
@@ -167,7 +177,7 @@ insert_sudo () {
     CURSOR=$(($CURSOR + $#prefix + 1))
 }
 zle -N insert-sudo insert_sudo
-bindkey "^[s" insert-sudo
+bindkey "^[S" insert-sudo
 
 # ^Z to foreground the last suspended job.
 foreground-current-job() { fg; }
