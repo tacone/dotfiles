@@ -149,6 +149,8 @@ function zshaddhistory() {
 
 # --- Utility functions
 
+# --- Shortcuts
+
 # --- Use "+"" to pick and autocompleted item without closing
 #     the completions menu
 bindkey -M menuselect "+" accept-and-menu-complete
@@ -170,6 +172,8 @@ bindkey -s '\et' ' | tail -n1000 -f'
 bindkey -s '\ec' ' | wc -l'
 # --- Alt + o to git checkout
 bindkey -s '\eo' 'git checkout '
+# --- Alt + u to sort -u
+bindkey -s '\eu' ' | sort -u'
 
 
 # --- Alt + H to access the man page of the current command
