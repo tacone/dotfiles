@@ -215,7 +215,7 @@ function filewatch() {
     # TODO: optional notify-send
     echo "${@:2}"
    "${@:2}"
-   while inotifywait -e close_write ${~1}; do ${@:2}; done;
+   while inotifywait -r -e close_write ${~1}; do ${@:2}; done;
 }
 
 
