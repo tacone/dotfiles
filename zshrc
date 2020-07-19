@@ -36,6 +36,7 @@ source $ZSH/oh-my-zsh.sh
 # --- Aliases
 
 alias csv='column -n -s , -t'
+type yq > /dev/null && alias yq='yq -C'
 
 # remove meteor aliases
 for i in `alias | grep meteor | cut -d= -f1 `; do alias $i=; done
@@ -155,26 +156,35 @@ function zshaddhistory() {
 #     the completions menu
 bindkey -M menuselect "+" accept-and-menu-complete
 
-# --- Alt + l to write ll
-bindkey -s '\el' 'ls -1 '
-# --- Alt + s to pipe in grep
-bindkey -s '\eg' ' | grep -i '
-# --- Alt + x/X to pipe in xargs
-bindkey -s '\ex' ' | xargs -n1 -d "\\n" '
-bindkey -s '\eX' ' | xargs -n1 -d "\\n" -I {} '
-# --- Alt + f to find -name
-bindkey -s '\ef' 'find . -name '\''*.*'\'
-# --- Alt + s to sed -s s///g
-bindkey -s '\es' ' | sed -s '\''s///g'\'
-# --- Alt + t to tail -n1000 -f
-bindkey -s '\et' ' | tail -n1000 -f'
-# --- Alt + c to count with wc -l
-bindkey -s '\ec' ' | wc -l'
-# --- Alt + o to git checkout
-bindkey -s '\eo' 'git checkout '
-# --- Alt + u to sort -u
-bindkey -s '\eu' ' | sort -u'
+export _SEP='';
+multiline () {
+[ $_SEP ] && _SEP='' || _SEP='\\\n  ';
+[ $_SEP ] && echo 'multiline on' || echo 'multiline off';
+_bind_custom_keys;
+}
 
+_bind_custom_keys () {
+    # --- Alt + l to write ll
+    bindkey -s '\el' 'ls -1 '
+    # --- Alt + s to pipe in grep
+    bindkey -s '\eg' $_SEP' | grep -i '
+    # --- Alt + x/X to pipe in xargs
+    bindkey -s '\ex' $_SEP' | xargs -n1 -d "\\n" '
+    bindkey -s '\eX' $_SEP' | xargs -n1 -d "\\n" -I {} '
+    # --- Alt + f to find -name
+    bindkey -s '\ef' 'find . -name '\''*.*'\'
+    # --- Alt + s to sed -s s///g
+    bindkey -s '\es' $_SEP' | sed -s '\''s///g'\'
+    # --- Alt + t to tail -n1000 -f
+    bindkey -s '\et' $_SEP' | tail -n1000 -f'
+    # --- Alt + c to count with wc -l
+    bindkey -s '\ec' $_SEP' | wc -l'
+    # --- Alt + o to git checkout
+    bindkey -s '\eo' 'git checkout '
+    # --- Alt + u to sort -u
+    bindkey -s '\eu' $_SEP' | sort -u'
+}
+_bind_custom_keys;
 
 # --- Alt + H to access the man page of the current command
 # (ex: git commit<Esc+h>)

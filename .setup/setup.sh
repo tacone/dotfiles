@@ -19,6 +19,10 @@ sudo apt-get install vim
 
 sudo apt-get install grc
 
+# --- fonts
+
+sudo apt-get install fonts-powerline
+
 # --- howdoi
 
 pip3 install howdoi
