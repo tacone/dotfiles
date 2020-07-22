@@ -1,0 +1,49 @@
+#!/bin/bash
+
+set -e
+
+DEST=~/.dotfiles/.settings
+
+USAGE=$(
+    cat <<EOT
+Usage:
+  settings COMMAND
+
+Commands:
+  export        saves the settings in $DEST
+  import        imports the settings in $DEST
+EOT
+)
+
+[ -z $1 ] && {
+    echo "error: no command specified"
+    echo
+    echo "$USAGE"
+    exit 2
+}
+
+mkdir -p $DEST
+
+[ $1 == 'export' ] && {
+    (
+        set -xu
+        dconf dump /com/gexperts/Tilix/ > "$DEST/tilix.ini"
+    )
+
+    exit 0
+}
+
+
+[ $1 == 'import' ] && {
+    (
+        set -xu
+        dconf load /com/gexperts/Tilix/ < "$DEST/tilix.ini"
+    )
+
+    exit 0
+}
+
+echo "error: unknown command $1"
+echo
+echo "$USAGE"
+exit
