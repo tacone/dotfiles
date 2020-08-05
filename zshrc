@@ -35,6 +35,10 @@ source $ZSH/oh-my-zsh.sh
 
 # --- Aliases
 
+alias find='noglob find'
+alias €='noglob €'
+alias €€='noglob €€'
+
 alias csv='column -n -s , -t'
 type yq > /dev/null && alias yq='yq -C'
 
@@ -172,7 +176,7 @@ _bind_custom_keys () {
     bindkey -s '\ex' $_SEP' | xargs -n1 -d "\\n" '
     bindkey -s '\eX' $_SEP' | xargs -n1 -d "\\n" -I {} '
     # --- Alt + f to find -name
-    bindkey -s '\ef' 'find . -name '\''*.*'\'
+    bindkey -s '\ef' 'find . -name *'
     # --- Alt + s to sed -s s///g
     bindkey -s '\es' $_SEP' | sed -s '\''s///g'\'
     # --- Alt + t to tail -n1000 -f
