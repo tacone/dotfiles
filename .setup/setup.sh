@@ -19,6 +19,7 @@ sudo apt-get install vim
 
 sudo apt-get install grc
 
+
 # --- fonts
 
 sudo apt-get install fonts-powerline
@@ -29,8 +30,7 @@ pip3 install howdoi
 
 # set up symlinks
 
-sudo add-apt-repository ppa:martin-frost/thoughtbot-rcm
-sudo apt-get update && sudo apt-get install rcm
+sudo apt-get install rcm
 
 rcup -v
 
@@ -41,3 +41,31 @@ sudo apt-get update
 sudo apt-get install -y nodejs
 
 npm install -g npm-check-updates
+
+# docker
+
+sudo apt-get update
+
+sudo apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg-agent \
+    software-properties-common
+
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+sudo add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable"
+
+sudo apt-get update
+sudo apt-get install docker-ce docker-ce-cli containerd.io
+
+sudo gpasswd -a $USER docker
+newgrp docker
+
+sudo curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+

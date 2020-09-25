@@ -7,7 +7,7 @@ dconf write /org/gnome/shell/app-switcher/current-workspace-only 'true'
 echo
 
 # make sure the extensions folder exists
-mkdir -p ~/.local/share/gnome-shell/extensions 2>/dev/null
+#mkdir -p ~/.local/share/gnome-shell/extensions 2>/dev/null
 
 install-gnome-extension() {
   # disable the freaking arrow
@@ -21,22 +21,14 @@ install-gnome-extension() {
   echo
 }
 
-# disable the freaking arrow
-install-gnome-extension disable-workspace-switcher-popup@github.com git://github.com/windsorschmidt/disable-workspace-switcher-popup
+sudo apt-get install tilix
 
-# disable window title bar when maximized
-NAME=maximus-two@wilfinitlike.gmail.com
-REPO=https://github.com/wilfm/GnomeExtensionMaximusTwo.git
-# maximus
-echo "install $NAME"
-if ! [ -d ~/.local/share/gnome-shell/extensions/$NAME ] ; then
-    git clone $REPO /tmp/$NAME
-    cd /tmp/$NAME
-    git checkout version4
-    mv /tmp/$NAME/$NAME ~/.local/share/gnome-shell/extensions/
-    rm /tmp/$NAME -rf
-else
-  echo "   ... extension already installed";
-fi
-gnome-shell-extension-tool -e $NAME
-echo
+# visual studio code
+
+wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+sudo install -o root -g root -m 644 packages.microsoft.gpg /etc/apt/trusted.gpg.d/
+sudo sh -c 'echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
+rm packages.microsoft.gpg
+sudo apt-get install apt-transport-https
+sudo apt-get update
+sudo apt-get install code # or code-insiders
