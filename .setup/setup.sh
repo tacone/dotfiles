@@ -2,6 +2,8 @@
 
 cd ~
 
+sudo apt-get update
+
 # --- install oh my zsh
 
 sudo apt-get install git zsh curl
@@ -9,29 +11,32 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/mas
 
 # --- filewatch
 
-sudo apt-get install inotify-tools
+sudo apt-get install -y inotify-tools
 
 # --- vim
 
-sudo apt-get install vim
+sudo apt-get install -y vim
+
+# --- nmap
+
+sudo apt-get install -y nmap
 
 # --- grc (command output highlighting)
 
-sudo apt-get install grc
+sudo apt-get install -y grc
 
 
 # --- fonts
 
-sudo apt-get install fonts-powerline
+sudo apt-get install -y fonts-powerline
 
 # --- howdoi
 
-pip3 install howdoi
+sudo apt-get install -y howdoi
 
 # set up symlinks
 
-sudo apt-get install rcm
-
+sudo apt-get install -y rcm
 rcup -v
 
 # node!
@@ -43,8 +48,6 @@ sudo apt-get install -y nodejs
 npm install -g npm-check-updates
 
 # docker
-
-sudo apt-get update
 
 sudo apt-get install \
     apt-transport-https \
