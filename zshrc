@@ -22,6 +22,11 @@ export PATH="$HOME/.bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:
 if [[ -r "$HOME/.zprofile" ]]; then
         source "$HOME/.zprofile"
 fi
+
+if [ -d "$HOME/.cargo" ] ; then
+    source "$HOME/.cargo/env"
+fi
+
 # have NPM install global packages in the home dir
 NPM_PACKAGES="${HOME}/.npm-packages"
 NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
