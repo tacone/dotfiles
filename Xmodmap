@@ -7,21 +7,21 @@ keysym l = l L Right L lstroke Lstroke lstroke
 
 keysym u = u U Home U downarrow uparrow downarrow
 keysym o = o O End O oslash Oslash oslash
-keycode  29 = y Y Prior Y leftarrow yen
+keysym y = y Y Prior Y leftarrow yen
 keysym h = h H Next H hstroke Hstroke hstroke
 
 keysym n = n N BackSpace N ntilde Ntilde ntilde Ntilde n N ntilde Ntilde
 keysym m = m M Delete M mu masculine mu masculine m M mu masculine m M mu masculine
 
-keycode  25 = w W Up W lstroke Lstroke lstroke
-keycode  38 = a A Left A ae AE ae
-keycode  39 = s S Down S ssharp section ssharp
-keycode  40 = d D Right D eth ETH eth
-keycode  24 = q Q Home Q at Greek_OMEGA at
-keycode  26 = e E End E EuroSign cent EuroSign
+keysym w = w W Up W lstroke Lstroke lstroke
+keysym a = a A Left A ae AE ae
+keysym s = s S Down S ssharp section ssharp
+keysym d = d D Right D eth ETH eth
+keysym q = q Q Home Q at Greek_OMEGA at
+keysym e = e E End E EuroSign cent EuroSign
 
-keycode  10 = 1 exclam Prior exclam onesuperior exclamdown
-keycode  11 = 2 quotedbl Next at twosuperior doubleacute
+keysym 1 = 1 exclam Prior exclam onesuperior exclamdown
+keysym 2 = 2 quotedbl Next at twosuperior doubleacute
 ! keycode  49 = backslash bar Control_L asciitilde notsign brokenbar
 
 
