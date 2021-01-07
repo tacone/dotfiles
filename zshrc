@@ -8,7 +8,7 @@ ZSH_THEME="ys"
 CASE_SENSITIVE="false"
 
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git wp-cli z colored-man-pages meteor nmap command-not-found nmap httpie)
+plugins=(git wp-cli z colored-man-pages meteor nmap command-not-found nmap httpie magic-enter)
 
 # --- User configuration
 
@@ -192,6 +192,10 @@ _bind_custom_keys () {
     bindkey -s '\eo' 'git checkout '
     # --- Alt + u to sort -u
     bindkey -s '\eu' $_SEP' | sort -u'
+
+    # --- Alt + . to cd ..
+    bindkey -s '\e.' "cd ..\n"
+
 }
 _bind_custom_keys;
 
