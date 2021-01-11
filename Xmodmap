@@ -7,8 +7,8 @@ keysym l = l L Right L lstroke Lstroke lstroke
 
 keysym u = u U Home U downarrow uparrow downarrow
 keysym o = o O End O oslash Oslash oslash
-keysym y = y Y Prior Y leftarrow yen
-keysym h = h H Next H hstroke Hstroke hstroke
+keysym p = p P Prior P thorn THORN
+keycode 47 = ograve ccedilla Next colon at cedilla
 
 keysym n = n N BackSpace N ntilde Ntilde ntilde Ntilde n N ntilde Ntilde
 keysym m = m M Delete M mu masculine mu masculine m M mu masculine m M mu masculine
@@ -22,7 +22,6 @@ keysym e = e E End E EuroSign cent EuroSign
 
 keysym 1 = 1 exclam Prior exclam onesuperior exclamdown
 keysym 2 = 2 quotedbl Next at twosuperior doubleacute
-! keycode  49 = backslash bar Control_L asciitilde notsign brokenbar
-
+keycode 49 = backslash bar Escape asciitilde notsign brokenbar
 
 keycode  65 = space NoSymbol Return
