@@ -20,8 +20,13 @@ keysym d = d D Right D eth ETH eth
 keysym q = q Q Home Q at Greek_OMEGA at
 keysym e = e E End E EuroSign cent EuroSign
 
-keysym 1 = 1 exclam Prior exclam onesuperior exclamdown
-keysym 2 = 2 quotedbl Next at twosuperior doubleacute
+keysym 1 = 1 exclam exclam exclam onesuperior exclamdown
+keysym 2 = 2 quotedbl quotedbl at twosuperior doubleacute
+keysym 4 = 4 dollar dollar dollar onequarter oneeighth
+
 keycode 49 = backslash bar Escape asciitilde notsign brokenbar
+
+keycode  59 = comma semicolon semicolon less acute multiply
+keycode  60 = period colon colon greater periodcentered diaeresis
 
 keycode  65 = space NoSymbol Return
