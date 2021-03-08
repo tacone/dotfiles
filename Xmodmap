@@ -20,16 +20,16 @@ keysym d = d D Right D eth ETH eth
 keysym q = q Q Home Q at Greek_OMEGA at
 keysym e = e E End E EuroSign cent EuroSign
 
-keysym 1 = 1 exclam exclam exclam onesuperior exclamdown
-keysym 2 = 2 quotedbl quotedbl at twosuperior doubleacute
-keysym 3 = 3 sterling sterling sterling threesuperior dead_tilde threesuperior
-keysym 4 = 4 dollar dollar dollar onequarter oneeighth onequarter
-keysym 5 = 5 percent percent percent onehalf threeeighths onehalf
-keysym 6 = 6 ampersand ampersand ampersand notsign fiveeighths notsign
-keysym 7 = 7 slash slash slash braceleft seveneighths braceleft
-keysym 8 = 8 parenleft parenleft parenleft bracketleft trademark bracketleft
-keysym 9 = 9 parenright parenright parenright bracketright plusminus bracketright
-keysym 0 = 0 equal equal equal braceright dead_ogonek braceright
+keysym 1 = exclam 1 1 exclam onesuperior exclamdown
+keysym 2 = quotedbl 2 2 at twosuperior doubleacute
+keysym 3 = sterling 3 3 sterling threesuperior dead_tilde threesuperior
+keysym 4 = dollar 4 4 dollar onequarter oneeighth onequarter
+keysym 5 = percent 5 5 percent onehalf threeeighths onehalf
+keysym 6 = ampersand 6 6 ampersand notsign fiveeighths notsign
+keysym 7 = slash 7 7 slash braceleft seveneighths braceleft
+keysym 8 = parenleft 8 8 parenleft bracketleft trademark bracketleft
+keysym 9 = parenright 9 9 parenright bracketright plusminus bracketright
+keysym 0 = equal 0 0 equal braceright dead_ogonek braceright
 keycode 20 = apostrophe question question question grave questiondown grave
 
 keycode 49 = backslash bar Escape asciitilde notsign brokenbar
@@ -39,5 +39,9 @@ keycode  60 = period colon colon greater periodcentered diaeresis
 
 keycode  65 = space NoSymbol Return
 
-keycode  52 = z Z Escape Z guillemotleft less guillemotleft
 keycode  94 = less greater Escape greater guillemotleft guillemotright guillemotleft
+keycode  52 = z Z Escape Z guillemotleft less guillemotleft
+keycode  53 = x X XF86Cut X guillemotright greater guillemotright
+keycode  54 = c C XF86Copy C cent copyright cent
+keycode  55 = v V XF86Paste V leftdoublequotemark leftsinglequotemark leftdoublequotemark
+
