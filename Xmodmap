@@ -8,6 +8,9 @@ keysym l = l L Right L lstroke Lstroke lstroke
 keysym u = u U Home U downarrow uparrow downarrow
 keysym o = o O End O oslash Oslash oslash
 keysym p = p P Prior P thorn THORN
+keycode  34 = egrave eacute braceleft eacute bracketleft braceleft bracketleft
+keycode  35 = plus asterisk braceright asterisk bracketright braceright bracketright
+
 keycode 47 = ograve ccedilla Next colon at cedilla
 
 keysym n = n N BackSpace N ntilde Ntilde ntilde Ntilde n N ntilde Ntilde
