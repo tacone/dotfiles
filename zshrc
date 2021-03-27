@@ -7,6 +7,8 @@ ZSH_THEME="ys"
 # Uncomment the following line to use case-sensitive completion.
 CASE_SENSITIVE="false"
 
+MAGIC_ENTER_GIT_COMMAND="git status"
+
 # Example format: plugins=(rails git textmate ruby lighthouse)
 plugins=(git wp-cli z colored-man-pages meteor nmap command-not-found nmap httpie magic-enter)
 
