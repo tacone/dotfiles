@@ -25,7 +25,7 @@ keysym e = e E End E EuroSign cent EuroSign
 
 keycode 49 = semicolon bar backslash asciitilde notsign brokenbar
 keysym 1 = 1 exclam exclam onesuperior exclamdown
-keysym 2 = 2 quotedbl at twosuperior doubleacute
+keysym 2 = 2 quotedbl quotedbl twosuperior doubleacute
 keysym 3 = 3 underscore sterling threesuperior dead_tilde threesuperior
 keysym 4 = 4 dollar dollar onequarter oneeighth onequarter
 keysym 5 = 5 percent percent onehalf threeeighths onehalf
