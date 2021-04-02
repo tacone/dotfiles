@@ -175,7 +175,7 @@ _bind_custom_keys;
 }
 
 _bind_custom_keys () {
-    # --- Alt + l to write ll
+    # --- Alt + l to write ls -1
     bindkey -s '\el' 'ls -1 '
     # --- Alt + s to pipe in grep
     bindkey -s '\eg' $_SEP' | grep -i '
@@ -195,6 +195,10 @@ _bind_custom_keys () {
     # --- Alt + u to sort -u
     bindkey -s '\eu' $_SEP' | sort -u'
 
+    # --- Alt + d to git diff
+    bindkey -s '\ed' "git diff\n"
+    # --- Alt + D to git diff --cached
+    bindkey -s '\eD' "git diff --cached\n"
     # --- Alt + . to cd ..
     bindkey -s '\e.' "cd ..\n"
 
