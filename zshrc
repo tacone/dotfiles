@@ -59,7 +59,11 @@ after() {
 	grep -A10000 "$@" | tail -n +2
 }
 
+# remove empty lines
 alias filter-empty='grep -vP '\''^'\\'s*$'\'
+
+# trim leading and trailing whitespaces
+alias trim='sed "s/\(^ *\| *\$\)//g"'
 
 
 alias add-alias='echo "Please insert the new alias:"; read string; echo alias ${string} >> $HOME/.aliases; source $HOME/.aliases'
