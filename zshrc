@@ -10,7 +10,7 @@ CASE_SENSITIVE="false"
 MAGIC_ENTER_GIT_COMMAND="git status"
 
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git wp-cli z colored-man-pages meteor nmap command-not-found nmap httpie magic-enter)
+plugins=(git wp-cli z colored-man-pages nmap command-not-found nmap httpie magic-enter)
 
 # --- User configuration
 
@@ -49,8 +49,18 @@ alias €€='noglob €€'
 alias csv='column -n -s , -t'
 type yq > /dev/null && alias yq='yq -C'
 
-# remove meteor aliases
-for i in `alias | grep meteor | cut -d= -f1 `; do alias $i=; done
+# output everything before a string (not included)
+before() {
+	grep -B10000 "$@" | head -n -1
+}
+
+# output everything adter a string (not included)
+after() {
+	grep -A10000 "$@" | tail -n +2
+}
+
+alias filter-empty='grep -vP '\''^'\\'s*$'\'
+
 
 alias add-alias='echo "Please insert the new alias:"; read string; echo alias ${string} >> $HOME/.aliases; source $HOME/.aliases'
 alias edit-alias='$EDITOR $HOME/.aliases; source $HOME/.aliases'
