@@ -51,12 +51,12 @@ type yq > /dev/null && alias yq='yq -C'
 
 # output everything before a string (not included)
 before() {
-	grep -B10000 "$@" | head -n -1
+	grep -i -B10000 "$@" | head -n -1
 }
 
 # output everything adter a string (not included)
 after() {
-	grep -A10000 "$@" | tail -n +2
+	grep -i -A10000 "$@" | tail -n +2
 }
 
 # remove empty lines
@@ -191,8 +191,9 @@ _bind_custom_keys;
 _bind_custom_keys () {
     # --- base commands (just typing, no execution) ---
 
-    # --- Alt + l to write ls -1
-    bindkey -s '\el' 'ls -1 '
+    # --- Alt + l|L to write git log and git log --all
+    bindkey -s '\el' 'glol\n'
+    bindkey -s '\eL' 'glola\n'
     # --- Alt + s to pipe in grep
     bindkey -s '\eg' $_SEP' | grep -i '
     # --- Alt + x/X to pipe in xargs
@@ -273,6 +274,8 @@ function filewatch() {
    "${@:2}"
    while inotifywait -r -e close_write ${~1}; do ${@:2}; done;
 }
+
+alias filewatch='noglob filewatch'
 
 
 function filewatch2() {
