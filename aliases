@@ -1,5 +1,5 @@
 alias g="git commit -m"
-alias zshrc='vi ~/.zshrc'
+alias zshrc='code ~/.zshrc'
 alias fname="noglob find -name"
 alias -g each='-print0 | xargs -0 -I {}'
 alias youtube-dl='youtube-dl --embed-thumbnail -x -i --audio-format=mp3'
