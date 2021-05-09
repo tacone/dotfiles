@@ -122,6 +122,10 @@ alias Ð8='Ð 8'
 alias Ð9='Ð 9'
 alias Ð10='Ð 10'
 
+# --- pretty print yml and json
+
+alias -g @yml='| yq eval -P'
+
 # --- easy xargs
 alias -g »='| xargs -n1 -d "\n"'
 alias -g »»='| xargs -n1 -I{} -d "\n"'
@@ -211,6 +215,9 @@ _bind_custom_keys () {
     bindkey -s '\eo' 'git checkout '
     # --- Alt + u to sort -u
     bindkey -s '\eu' $_SEP' | sort -u'
+    # --- Alt + y to @yml
+    bindkey -s '\ey' $_SEP' @yml'
+
 
     # --- instant commands (will execute immediately) ---
 
