@@ -270,6 +270,16 @@ function gitignore.io() {
 	curl -L -s https://www.gitignore.io/api/$@ ;
 }
 
+function git-make-date() {
+    LC_ALL=C git log --all | grep -i "Date:   " | tail +2 | head -1 | sed -s 's/Date://g' | sed -s 's/+0200/CEST/g' | sed "s/\(^ *\| *\$\)//g" | LC_ALL=C xargs -n1 -d "\n" -I {} date -d'{} +'$(shuf -i 12-40 -n 1)' minutes'
+}
+
+function git-change-date() {
+    local new_date=$(git-make-date)
+
+    LC_ALL=C GIT_COMMITTER_DATE="$new_date" git commit --amend --date "$new_date"
+}
+
 function bb() {
     git clone https://bitbucket.org/${1}.git ${@:2}
 }
