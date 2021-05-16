@@ -436,3 +436,7 @@ export PATH=/home/stefano/.local/bin:$PATH
 # tabtab source for slss package
 # uninstall by removing these lines or running `tabtab uninstall slss`
 [[ -f /home/stefano/.npm-packages/lib/node_modules/serverless/node_modules/tabtab/.completions/slss.zsh ]] && . /home/stefano/.npm-packages/lib/node_modules/serverless/node_modules/tabtab/.completions/slss.zsh
+
+# --- options override
+
+unsetopt completealiases # enables alias completion
