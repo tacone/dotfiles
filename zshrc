@@ -125,6 +125,7 @@ alias Ð10='Ð 10'
 # --- pretty print yml and json
 
 alias -g @yml='| yq eval -P'
+alias -g @json='| jq'
 
 # --- easy xargs
 alias -g »='| xargs -n1 -d "\n"'
@@ -217,6 +218,8 @@ _bind_custom_keys () {
     bindkey -s '\eu' $_SEP' | sort -u'
     # --- Alt + y to @yml
     bindkey -s '\ey' $_SEP' @yml'
+    # --- Alt + j to @json
+    bindkey -s '\ej' $_SEP' @json'
 
 
     # --- instant commands (will execute immediately) ---
