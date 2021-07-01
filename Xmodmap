@@ -18,6 +18,7 @@ keycode 47 = ograve ccedilla KP_Next colon at cedilla
 keysym n = n N BackSpace N ntilde Ntilde ntilde Ntilde n N ntilde Ntilde
 keysym m = m M Delete M mu masculine mu masculine m M mu masculine m M mu masculine
 
+keycode  23 = Tab ISO_Left_Tab Return semicolon
 keysym w = w W Up W lstroke Lstroke lstroke
 keysym a = a A Left A ae AE ae
 keysym s = s S Down S ssharp section ssharp
@@ -26,8 +27,6 @@ keysym q = q Q Home Q at Greek_OMEGA at
 keysym e = e E End E EuroSign cent EuroSign
 keysym r = r R KP_Prior R paragraph registered paragraph
 keysym f = f F KP_Next F dstroke ordfeminine dstroke
-
-
 
 keycode 49 = backslash bar backslash asciitilde notsign brokenbar
 keysym 1 = 1 exclam exclam onesuperior exclamdown
