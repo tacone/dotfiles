@@ -29,7 +29,7 @@ keysym f = f F KP_Next F dstroke ordfeminine dstroke
 
 
 
-keycode 49 = semicolon bar backslash asciitilde notsign brokenbar
+keycode 49 = backslash bar backslash asciitilde notsign brokenbar
 keysym 1 = 1 exclam exclam onesuperior exclamdown
 keysym 2 = 2 quotedbl quotedbl twosuperior doubleacute
 keysym 3 = 3 sterling sterling threesuperior dead_tilde threesuperior
