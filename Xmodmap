@@ -5,15 +5,15 @@ keysym j = j J Left J dead_hook dead_horn dead_hook
 keysym k = k K Down K kra ampersand kra
 keysym l = l L Right L lstroke Lstroke lstroke
 
-keysym y = y Y Prior Y leftarrow yen leftarrow
-keysym h = h H Next H hstroke Hstroke hstroke
+keysym y = y Y KP_Prior Y leftarrow yen leftarrow
+keysym h = h H KP_Next H hstroke Hstroke hstroke
 keysym u = u U Home U downarrow uparrow downarrow
 keysym o = o O End O oslash Oslash oslash
-keysym p = p P Prior P thorn THORN
+keysym p = p P KP_Prior P thorn THORN
 keycode  34 = egrave eacute braceleft eacute bracketleft braceleft bracketleft
 keycode  35 = plus asterisk braceright asterisk bracketright braceright bracketright
 
-keycode 47 = ograve ccedilla Next colon at cedilla
+keycode 47 = ograve ccedilla KP_Next colon at cedilla
 
 keysym n = n N BackSpace N ntilde Ntilde ntilde Ntilde n N ntilde Ntilde
 keysym m = m M Delete M mu masculine mu masculine m M mu masculine m M mu masculine
@@ -24,11 +24,15 @@ keysym s = s S Down S ssharp section ssharp
 keysym d = d D Right D eth ETH eth
 keysym q = q Q Home Q at Greek_OMEGA at
 keysym e = e E End E EuroSign cent EuroSign
+keysym r = r R KP_Prior R paragraph registered paragraph
+keysym f = f F KP_Next F dstroke ordfeminine dstroke
+
+
 
 keycode 49 = semicolon bar backslash asciitilde notsign brokenbar
 keysym 1 = 1 exclam exclam onesuperior exclamdown
 keysym 2 = 2 quotedbl quotedbl twosuperior doubleacute
-keysym 3 = 3 underscore sterling threesuperior dead_tilde threesuperior
+keysym 3 = 3 sterling sterling threesuperior dead_tilde threesuperior
 keysym 4 = 4 dollar dollar onequarter oneeighth onequarter
 keysym 5 = 5 percent percent onehalf threeeighths onehalf
 keysym 6 = 6 ampersand ampersand notsign fiveeighths notsign
