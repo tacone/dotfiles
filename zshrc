@@ -445,4 +445,4 @@ export PATH=/home/stefano/.local/bin:$PATH
 unsetopt completealiases # enables alias completion
 
 # start the terminal with matrix rain
-type cmatrix > /dev/null && cmatrix -s -o
+type cmatrix > /dev/null && ( cmatrix -s -o; read -k1 -s )
