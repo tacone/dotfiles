@@ -33,3 +33,8 @@ sudo apt-get install -y apt-transport-https
 sudo apt-get update
 sudo apt-get install -y code # or code-insiders
 sudo apt-get install -y cmatrix
+sudo apt-get install -y nnn # file explorer
+
+# set code as the default text editor
+xdg-mime default code.desktop text/plain
+sudo update-alternatives --set editor /usr/bin/code

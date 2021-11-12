@@ -65,6 +65,7 @@ alias filter-empty='grep -vP '\''^'\\'s*$'\'
 # trim leading and trailing whitespaces
 alias trim='sed "s/\(^ *\| *\$\)//g"'
 
+alias x='xdg-open'
 
 alias add-alias='echo "Please insert the new alias:"; read string; echo alias ${string} >> $HOME/.aliases; source $HOME/.aliases'
 alias edit-alias='$EDITOR $HOME/.aliases; source $HOME/.aliases'
@@ -220,6 +221,8 @@ _bind_custom_keys () {
     bindkey -s '\ey' $_SEP' @yml'
     # --- Alt + j to @json
     bindkey -s '\ej' $_SEP' @json'
+    # --- Alt + e to nnnn
+    bindkey -s '\ee' $_SEP'nnn\n'
 
 
     # --- instant commands (will execute immediately) ---
