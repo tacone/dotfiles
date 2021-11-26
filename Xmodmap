@@ -1,4 +1,5 @@
 keycode 66 = Mode_switch
+keysym Menu = Mode_switch NoSymbol Menu
 
 keysym i = i I Up I rightarrow idotless rightarrow
 keysym j = j J Left J dead_hook dead_horn dead_hook
