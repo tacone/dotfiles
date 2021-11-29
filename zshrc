@@ -4,6 +4,10 @@ export ZSH_CUSTOM=$HOME/.dotfiles/.zsh-plugins
 
 # Set name of the theme to load.
 ZSH_THEME="ys"
+if [[ -r "$HOME/.oh-my-zsh/themes/ys-custom.zsh-theme" ]]; then
+    ZSH_THEME="ys-custom"
+fi
+
 # Uncomment the following line to use case-sensitive completion.
 CASE_SENSITIVE="false"
 
@@ -22,7 +26,7 @@ export EDITOR='vim'
 
 export PATH="$HOME/.bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/jvm/java-8-oracle/bin:/usr/lib/jvm/java-8-oracle/db/bin:/usr/lib/jvm/java-8-oracle/jre/bin:/home/stefano/.local/bin"
 if [[ -r "$HOME/.zprofile" ]]; then
-        source "$HOME/.zprofile"
+    source "$HOME/.zprofile"
 fi
 
 if [ -d "$HOME/.cargo" ] ; then
