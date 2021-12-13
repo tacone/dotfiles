@@ -38,6 +38,10 @@ sudo apt-get install -y howdoi
 
 sudo apt-get install -y nnn
 
+# --- clipcopy
+
+sudo apt-get install -y xclip xsel
+
 # set up symlinks
 
 sudo apt-get install -y rcm
