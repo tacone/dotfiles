@@ -34,6 +34,10 @@ sudo apt-get install -y fonts-powerline
 
 sudo apt-get install -y howdoi
 
+# --- nnn
+
+sudo apt-get install -y nnn
+
 # set up symlinks
 
 sudo apt-get install -y rcm
