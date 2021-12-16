@@ -46,6 +46,7 @@ source $ZSH/oh-my-zsh.sh
 
 # --- Aliases
 
+alias git-ls='git ls-tree -r $(git rev-parse --abbrev-ref HEAD) --name-only'
 alias find='noglob find'
 alias €='noglob €'
 alias €€='noglob €€'
