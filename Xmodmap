@@ -10,11 +10,11 @@ keysym y = y Y KP_Prior Y leftarrow yen leftarrow
 keysym h = h H KP_Next H hstroke Hstroke hstroke
 keysym u = u U Home U downarrow uparrow downarrow
 keysym o = o O End O oslash Oslash oslash
-keysym p = p P KP_Prior P thorn THORN
+keysym p = p P KP_Prior KP_Prior thorn THORN
 keycode  34 = egrave eacute braceleft eacute bracketleft braceleft bracketleft
 keycode  35 = plus asterisk braceright asterisk bracketright braceright bracketright
 
-keycode 47 = ograve ccedilla KP_Next colon at cedilla
+keycode 47 = ograve ccedilla KP_Next KP_Next at cedilla
 
 keysym n = n N BackSpace N ntilde Ntilde ntilde Ntilde n N ntilde Ntilde
 keysym m = m M Delete M mu masculine mu masculine m M mu masculine m M mu masculine
@@ -26,8 +26,8 @@ keysym s = s S Down S ssharp section ssharp
 keysym d = d D Right D eth ETH eth
 keysym q = q Q Home Q at Greek_OMEGA at
 keysym e = e E End E EuroSign cent EuroSign
-keysym r = r R KP_Prior R paragraph registered paragraph
-keysym f = f F KP_Next F dstroke ordfeminine dstroke
+keysym r = r R KP_Prior KP_Prior paragraph registered paragraph
+keysym f = f F KP_Next KP_Next dstroke ordfeminine dstroke
 
 keycode 49 = backslash bar backslash asciitilde notsign brokenbar
 keysym 1 = 1 exclam exclam onesuperior exclamdown
