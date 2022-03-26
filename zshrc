@@ -54,6 +54,8 @@ alias €€='noglob €€'
 alias csv='column -n -s , -t'
 type yq > /dev/null && alias yq='yq -C'
 
+alias qr='qrencode -t utf8 -m2'
+
 # output everything before a string (not included)
 before() {
 	grep -i -B10000 "$@" | head -n -1
