@@ -201,6 +201,18 @@ multiline () {
 _bind_custom_keys;
 }
 
+custom_nnn() {
+    local TMP_FILE=$(mktemp /tmp/nnn-lastd.XXXXXX)
+    NNN_TMPFILE=$TMP_FILE \nnn "$@"
+    local DEST_FOLDER=$(cat $TMP_FILE | head -n1)
+    rm $TMP_FILE
+    # this check is insuficient, the following eval may lead to disasters
+    echo "$DEST_FOLDER" | grep -P '^cd ' > /dev/null || (echo invalid syntax; exit 255)
+    eval "$DEST_FOLDER";
+}
+
+alias nnn='custom_nnn'
+
 _bind_custom_keys () {
     # --- base commands (just typing, no execution) ---
 
@@ -229,7 +241,7 @@ _bind_custom_keys () {
     # --- Alt + j to @json
     bindkey -s '\ej' $_SEP' @json'
     # --- Alt + e to nnnn
-    bindkey -s '\ee' $_SEP'nnn\n'
+    bindkey -s '\ee' $_SEP'nnn -c\n'
 
 
     # --- instant commands (will execute immediately) ---
@@ -455,4 +467,4 @@ export PATH=/home/stefano/.local/bin:$PATH
 unsetopt completealiases # enables alias completion
 
 # start the terminal with matrix rain
-type cmatrix > /dev/null && [[ "$TERM_PROGRAM" != "vscode" ]] && ( cmatrix -s -o; read -k1 -s )
+type cmatrix > /dev/null && [[ "$TERM_PROGRAM" != "vscode" ]] && ( cmatrix -s; read -k1 -s )
