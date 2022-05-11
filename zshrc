@@ -445,8 +445,12 @@ export STANDARD_PATH=$PATH
 eval $_refresh_paths
 
 # --- fix tilix
-if [ -f /etc/profile.d/vte-2.91.sh ]; then
-    source /etc/profile.d/vte-2.91.sh
+# if [ -f /etc/profile.d/vte-2.91.sh ]; then
+#     source /etc/profile.d/vte-2.91.sh
+# fi
+
+if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
+        source /etc/profile.d/vte.sh
 fi
 
 
