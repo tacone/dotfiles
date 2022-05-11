@@ -241,7 +241,7 @@ _bind_custom_keys () {
     # --- Alt + j to @json
     bindkey -s '\ej' $_SEP' @json'
     # --- Alt + e to nnnn
-    bindkey -s '\ee' $_SEP'nnn -c\n'
+    bindkey -s '\ee' $_SEP'nnn -cH\n'
 
 
     # --- instant commands (will execute immediately) ---
