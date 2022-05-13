@@ -90,7 +90,6 @@ type "docker-machine" > /dev/null && source $HOME/.dotfiles/.zsh-plugins/docker-
 # combine grc with native coloring and make ls output clickable hyperlinks
 [[ -s "/etc/grc.conf" ]] && alias ll='grc --colour=auto ls -lh --color=always --hyperlink=always'
 alias dmesg='dmesg --reltime --color'
-alias howdoi='howdoi -c'
 type "code-insiders" > /dev/null && alias code=code-insiders
 
 # --- autocomplete npm packages
@@ -170,19 +169,6 @@ function add-path (){
   eval $_refresh_paths
 }
 alias edit-path='$EDITOR $HOME/.paths; eval $_refresh_paths'
-
-# --- Exclude some commands from the history
-
-function zshaddhistory() {
-    emulate -L zsh
-    if [[ $1 != "howdoi"* ]] ; then
-        print -sr -- "${1%%$'\n'}"
-        fc -p
-    else
-        return 1
-    fi
-}
-
 
 # --- Custom configuration
 
