@@ -288,7 +288,7 @@ function wwwwrite () {
 }
 
 function gh() {
-    git clone https://github.com/${1}.git ${@:2}
+    git clone git@github.com:${1}.git ${@:2}
 }
 
 function gitignore.io() {
