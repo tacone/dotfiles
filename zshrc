@@ -436,7 +436,11 @@ eval $_refresh_paths
 # fi
 
 if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
-        source /etc/profile.d/vte.sh
+        if [ -f /etc/profile.d/vte.sh ]; then
+            source /etc/profile.d/vte.sh
+        elif [ -f /etc/profile.d/vte-2.90.sh ]; then
+            source /etc/profile.d/vte-2.90.sh
+        fi
 fi
 
 
