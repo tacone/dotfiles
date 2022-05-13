@@ -444,7 +444,7 @@ if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
 fi
 
 
-export PATH=/home/stefano/.local/bin:$PATH
+export PATH=./scripts:/home/stefano/.local/bin:$PATH
 
 # --- options override
 
