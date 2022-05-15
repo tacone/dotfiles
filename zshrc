@@ -82,6 +82,76 @@ source $HOME/.aliases
 test -f $HOME/.custom-aliases || touch $HOME/.custom-aliases
 source $HOME/.custom-aliases
 
+byobu_col () {
+    #!/bin/sh -e
+    #
+    #    col1..col9 - handy hack to print a column from standard in
+    #
+    #    Copyright (C) 2010 Dustin Kirkland <kirkland@ubuntu.com>
+    #
+    #    Authors:
+    #        Dustin Kirkland <kirkland@ubuntu.com>
+    #
+    #    This program is free software: you can redistribute it and/or modify
+    #    it under the terms of the GNU General Public License as published by
+    #    the Free Software Foundation, either version 3 of the License.
+    #
+    #    This program is distributed in the hope that it will be useful,
+    #    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    #    GNU General Public License for more details.
+    #
+    #    You should have received a copy of the GNU General Public License
+    #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+    b=$1
+    shift || true
+
+    if [ $# -gt 0 ]; then
+        ifs='-F'"$1"
+        shift || true
+    else
+        ifs="-F "
+    fi
+
+    awk "$ifs" '{print $'${b#col}'}' ${@:1}
+}
+
+col1 () {
+    byobu_col 1 "$@"
+}
+col2 () {
+    byobu_col 2 "$@"
+}
+col3 () {
+    byobu_col 3 "$@"
+}
+col4 () {
+    byobu_col 4 "$@"
+}
+col5 () {
+    byobu_col 5 "$@"
+}
+col6 () {
+    byobu_col 6 "$@"
+}
+col7 () {
+    byobu_col 7 "$@"
+}
+col8 () {
+    byobu_col 8 "$@"
+}
+col9 () {
+    byobu_col 9 "$@"
+}
+NF () {
+    byobu_col NF "$@"
+}
+
+
+
+
+
 # --- output highlighting for common commands
 
 alias sudo='sudo '
