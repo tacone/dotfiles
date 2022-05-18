@@ -513,6 +513,11 @@ if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
         fi
 fi
 
+# Manjaro: offer to install missing package if command is not found
+if [[ -r /usr/share/zsh/functions/command-not-found.zsh ]]; then
+    source /usr/share/zsh/functions/command-not-found.zsh
+    export PKGFILE_PROMPT_INSTALL_MISSING=1
+fi
 
 export PATH=./scripts:/home/stefano/.local/bin:$PATH
 
