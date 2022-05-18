@@ -15,9 +15,9 @@ default_floating_border normal
 hide_edge_borders none
 
 # change borders
-bindsym $mod+u border none
-bindsym $mod+y border pixel 1
-bindsym $mod+n border normal
+# bindsym $mod+u border none
+# bindsym $mod+y border pixel 1
+# bindsym $mod+n border normal
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
@@ -32,14 +32,14 @@ floating_modifier $mod
 bindsym $mod+Return exec tilix
 # bindsym $mod+Return exec konsole
 # bindsym $mod+Return exec alacritty
+# start program launcher
+bindsym $mod+shift+Return exec --no-startup-id dmenu_recency
+
 
 bindsym F12 exec tilix --quake
 
 # kill focused window
 bindsym $mod+Shift+q kill
-
-# start program launcher
-bindsym $mod+d exec --no-startup-id dmenu_recency
 
 # launch categorized menu
 bindsym $mod+z exec --no-startup-id morc_menu
@@ -51,8 +51,8 @@ focus_wrapping no
 ## sound-section - DO NOT EDIT if you wish to automatically upgrade Alsa -> Pulseaudio later! ##
 ################################################################################################
 
-#exec --no-startup-id volumeicon
-#bindsym $mod+Ctrl+m exec terminal -e 'alsamixer'
+##exec --no-startup-id volumeicon
+##bindsym $mod+Ctrl+m exec terminal -e 'alsamixer'
 exec --no-startup-id start-pulseaudio-x11
 exec --no-startup-id pa-applet
 bindsym $mod+Ctrl+m exec pavucontrol
@@ -81,11 +81,31 @@ bindsym $mod+Ctrl+x --release exec --no-startup-id xkill
 
 focus_follows_mouse no
 
+set $left j
+set $down k
+set $up i
+set $right l
+set $home u
+set $end o
+
+set $alt_left a
+set $alt_down s
+set $alt_up w
+set $alt_right d
+set $alt_home q
+set $alt_end e
+
+
 # change focus
-bindsym $mod+j focus left
-bindsym $mod+k focus down
-bindsym $mod+l focus up
-bindsym $mod+semicolon focus right
+bindsym $mod+$left focus left
+bindsym $mod+$down focus down
+bindsym $mod+$up focus up
+bindsym $mod+$right focus right
+
+bindsym $mod+$alt_left focus left
+bindsym $mod+$alt_down focus down
+bindsym $mod+$alt_up focus up
+bindsym $mod+$alt_right focus right
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Left focus left
@@ -96,8 +116,8 @@ bindsym $mod+Right focus right
 # move focused window
 bindsym $mod+Shift+j move left
 bindsym $mod+Shift+k move down
-bindsym $mod+Shift+l move up
-bindsym $mod+Shift+semicolon move right
+bindsym $mod+Shift+i move up
+bindsym $mod+Shift+l move right
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Shift+Left move left
@@ -107,8 +127,8 @@ bindsym $mod+Shift+Right move right
 
 # workspace back and forth (with/without active container)
 workspace_auto_back_and_forth no
-bindsym $mod+b workspace back_and_forth
-bindsym $mod+Shift+b move container to workspace back_and_forth; workspace back_and_forth
+bindsym $mod+backslash workspace back_and_forth
+bindsym $mod+Shift+backslash move container to workspace back_and_forth; workspace back_and_forth
 
 # split orientation
 bindsym $mod+h split h;exec notify-send 'tile horizontally'
@@ -119,12 +139,12 @@ bindsym $mod+v split v;exec notify-send 'tile vertically'
 bindsym $mod+f fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
-bindsym $mod+backslash mode "$container_layout"
+#bindsym $mod+backslash mode "$container_layout"
 set $container_layout (w)tabbed, (s)stacking, (e)tiling, (f)ullscreen, (Return/Esc/Backslash) cancel
 mode "$container_layout" {
     bindsym s layout stacking, mode default
     bindsym w layout tabbed, mode default
-    bindsym e layout toggle split, mode defaultw
+    bindsym e layout toggle split, mode default
 
     # exit system mode: "Enter" or "Escape"
     bindsym $mod+backslash mode "default"
@@ -141,11 +161,13 @@ bindsym $mod+Shift+space floating toggle
 bindsym $mod+space focus mode_toggle
 
 # toggle sticky
-bindsym $mod+Shift+s sticky toggle
+bindsym $mod+Ctrl+s sticky toggle
 
 # focus the parent container
-bindsym $mod+q focus parent
-bindsym $mod+e focus child
+bindsym $mod+$home focus parent
+bindsym $mod+$end focus child
+bindsym $mod+$alt_home focus parent
+bindsym $mod+$alt_end focus child
 
 # move the currently focused window to the scratchpad
 bindsym $mod+Shift+minus move scratchpad
