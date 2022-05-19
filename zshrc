@@ -219,6 +219,9 @@ alias docker-remove-stopped-containers='docker rm $(docker ps -a -q -f status=ex
 alias docker-list-dangling-volumes='docker volume ls -f dangling=true'
 alias docker-remove-dangling-volumes='docker volume rm $(docker volume ls -q -f dangling=true)'
 
+git_http_to_ssh(){
+   echo $1 | sed 's#^https://#git@#g' | sed -E 's#(^git@[^/]+)/(.*)#\1:\2#g'
+}
 
 # --- Paths
 
