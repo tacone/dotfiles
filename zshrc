@@ -34,8 +34,9 @@ if [ -f "$HOME/.cargo/env" ] ; then
 fi
 
 # have NPM install global packages in the home dir
-NPM_PACKAGES="${HOME}/.npm-packages"
-NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
+export NPM_PACKAGES="${HOME}/.npm-packages"
+export NPM_CONFIG_PREFIX=~/.npm-packages
+export NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
 PATH="$NPM_PACKAGES/bin:$PATH"
 unset MANPATH # delete if you already modified MANPATH elsewhere in your config
 MANPATH="$NPM_PACKAGES/share/man:$(manpath)"
