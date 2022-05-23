@@ -139,7 +139,7 @@ bindsym $mod+v split v;exec notify-send 'tile vertically'
 bindsym $mod+f fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
-#bindsym $mod+backslash mode "$container_layout"
+bindsym $mod+Escape mode "$container_layout"
 set $container_layout (w)tabbed, (s)stacking, (e)tiling, (f)ullscreen, (Return/Esc/Backslash) cancel
 mode "$container_layout" {
     bindsym s layout stacking, mode default
@@ -304,10 +304,15 @@ mode "resize" {
         # Pressing right will grow the window’s width.
         # Pressing up will shrink the window’s height.
         # Pressing down will grow the window’s height.
-        bindsym j resize shrink width 5 px or 5 ppt
-        bindsym k resize grow height 5 px or 5 ppt
-        bindsym l resize shrink height 5 px or 5 ppt
-        bindsym semicolon resize grow width 5 px or 5 ppt
+        bindsym $left resize shrink width 5 px or 5 ppt
+        bindsym $down resize grow height 5 px or 5 ppt
+        bindsym $up resize shrink height 5 px or 5 ppt
+        bindsym $right resize grow width 5 px or 5 ppt
+
+        bindsym $alt_left resize shrink width 5 px or 5 ppt
+        bindsym $alt_down resize grow height 5 px or 5 ppt
+        bindsym $alt_up resize shrink height 5 px or 5 ppt
+        bindsym $alt_right resize grow width 5 px or 5 ppt
 
         # same bindings, but for the arrow keys
         bindsym Left resize shrink width 10 px or 10 ppt
