@@ -302,6 +302,8 @@ _bind_custom_keys () {
     bindkey -s '\ej' $_SEP' @json'
     # --- Alt + e to nnnn
     bindkey -s '\ee' $_SEP'nnn -cH\n'
+    # --- Alt + Shift + y to yarn run
+    bindkey -s '\eY' $_SEP'yarn run '
 
 
     # --- instant commands (will execute immediately) ---
