@@ -349,6 +349,14 @@ function wwwwrite () {
     sudo setfacl -R -m u:www-data:rwX -m u:`whoami`:rwX $1 && sudo setfacl -dR -m u:www-data:rwx -m u:`whoami`:rwx $1
 }
 
+function find-port() {
+    sudo lsof -n -i :${1} | grep LISTEN
+}
+
+function kill-port() {
+    find-port $1 | awk '{print $2}' | xargs sudo kill ${@:2}
+}
+
 function gh() {
     git clone git@github.com:${1}.git ${@:2}
 }
