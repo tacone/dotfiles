@@ -73,6 +73,8 @@ alias filter-empty='grep -vP '\''^'\\'s*$'\'
 # trim leading and trailing whitespaces
 alias trim='sed "s/\(^ *\| *\$\)//g"'
 
+alias sum-of='xargs | sed -e "s/\\ /+/g" | bc'
+
 alias x='xdg-open'
 
 alias add-alias='echo "Please insert the new alias:"; read string; echo alias ${string} >> $HOME/.aliases; source $HOME/.aliases'
@@ -273,6 +275,10 @@ custom_nnn() {
 
 alias nnn='custom_nnn'
 
+timestamp() {
+    date +%Y%m%d%H%M%S
+}
+
 _bind_custom_keys () {
     # --- base commands (just typing, no execution) ---
 
@@ -288,8 +294,8 @@ _bind_custom_keys () {
     bindkey -s '\ef' 'find . -name *'
     # --- Alt + s to sed -s s///g
     bindkey -s '\es' $_SEP' | sed -s '\''s///g'\'
-    # --- Alt + t to tail -n1000 -f
-    bindkey -s '\et' $_SEP' | tail -n1000 -f'
+    # --- Alt + t to print timestamp
+    bindkey -s '\et' '$(timestamp)'
     # --- Alt + c to count with wc -l
     bindkey -s '\ec' $_SEP' | wc -l'
     # --- Alt + o to git checkout
@@ -350,11 +356,18 @@ function wwwwrite () {
 }
 
 function find-port() {
-    sudo lsof -n -i :${1} | grep LISTEN
+    if [[ -s "/etc/grc.conf" ]]; then
+        local highlight=(grc -c conf.lsof cat -)
+    else
+        local highlight=(cat -)
+    fi
+    local output=$(sudo lsof -n -i :${1})
+    echo "$output" | head -n1 1>&2
+    echo "$output" | grep LISTEN | $highlight
 }
 
 function kill-port() {
-    find-port $1 | awk '{print $2}' | xargs sudo kill ${@:2}
+    find-port $1 2> /dev/null | awk '{print $2}' | xargs sudo kill ${@:2}
 }
 
 function gh() {
