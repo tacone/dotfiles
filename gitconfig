@@ -12,3 +12,5 @@
   cmd = code --wait $MERGED
 [push]
 	default = simple
+[init]
+	defaultBranch = master
