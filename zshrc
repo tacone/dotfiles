@@ -164,6 +164,7 @@ type "docker-machine" > /dev/null && source $HOME/.dotfiles/.zsh-plugins/docker-
 [[ -s "/etc/grc.conf" ]] && alias ll='grc --colour=auto ls -lh --color=always --hyperlink=always'
 alias dmesg='dmesg --reltime --color'
 type "code-insiders" > /dev/null && alias code=code-insiders
+type "fuck" > /dev/null && eval $(thefuck --alias)
 
 # --- autocomplete npm packages
 
@@ -395,12 +396,24 @@ function bb() {
 function filewatch() {
     # TODO: kill process upon repeat
     # TODO: optional notify-send
+    local time=${FILEWATCH_SLEEP_TIME:-0}
     echo "${@:2}"
    "${@:2}"
-   while inotifywait -r -e close_write ${~1}; do ${@:2}; done;
+   while inotifywait -r -e close_write ${~1}; do sleep $time; ${@:2}; done;
 }
 
 alias filewatch='noglob filewatch'
+alias filewatch0='FILEWATCH_SLEEP_TIME=0.5 noglob filewatch'
+alias filewatch1='FILEWATCH_SLEEP_TIME=1 noglob filewatch'
+alias filewatch2='FILEWATCH_SLEEP_TIME=2 noglob filewatch'
+alias filewatch3='FILEWATCH_SLEEP_TIME=3 noglob filewatch'
+alias filewatch4='FILEWATCH_SLEEP_TIME=4 noglob filewatch'
+alias filewatch5='FILEWATCH_SLEEP_TIME=5 noglob filewatch'
+alias filewatch6='FILEWATCH_SLEEP_TIME=6 noglob filewatch'
+alias filewatch7='FILEWATCH_SLEEP_TIME=7 noglob filewatch'
+alias filewatch8='FILEWATCH_SLEEP_TIME=8 noglob filewatch'
+alias filewatch9='FILEWATCH_SLEEP_TIME=9 noglob filewatch'
+alias filewatch10='FILEWATCH_SLEEP_TIME=10 noglob filewatch'
 
 
 function filewatch2() {
@@ -563,3 +576,4 @@ if  [[ "$TERM_PROGRAM" != "vscode" ]]; then
         cmatrix -s; read -k1 -s || true
     fi
 fi
+
