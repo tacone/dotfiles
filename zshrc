@@ -389,10 +389,6 @@ function git-change-date() {
     LC_ALL=C GIT_COMMITTER_DATE="$new_date" git commit --amend --date "$new_date"
 }
 
-function bb() {
-    git clone https://bitbucket.org/${1}.git ${@:2}
-}
-
 function filewatch() {
     # TODO: kill process upon repeat
     # TODO: optional notify-send
