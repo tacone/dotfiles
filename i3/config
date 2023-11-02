@@ -33,7 +33,7 @@ bindsym $mod+shift+Return exec tilix tilix -a app-new-window
 # bindsym $mod+Return exec konsole
 # bindsym $mod+Return exec alacritty
 # start program launcher
-bindsym $mod+Return exec --no-startup-id dmenu_recency
+bindsym $mod+Return exec --no-startup-id which budgie-run-dialog && budgie-run-dialog || dmenu_recency
 
 
 bindsym F12 exec tilix --quake
