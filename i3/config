@@ -29,11 +29,11 @@ floating_modifier $mod
 # start a terminal
 # bindsym $mod+Return exec terminal
 #bindsym $mod+Return exec i3-sensible-terminal
-bindsym $mod+shift+Return exec tilix tilix -a app-new-window
+bindsym $mod+Return exec tilix tilix -a app-new-window
 # bindsym $mod+Return exec konsole
 # bindsym $mod+Return exec alacritty
 # start program launcher
-bindsym $mod+Return exec --no-startup-id which budgie-run-dialog && budgie-run-dialog || dmenu_recency
+bindsym $mod+shift+Return exec --no-startup-id which budgie-run-dialog && budgie-run-dialog || dmenu_recency
 
 
 bindsym F12 exec tilix --quake

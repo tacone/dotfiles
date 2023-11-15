@@ -49,6 +49,28 @@ source $ZSH/oh-my-zsh.sh
 
 alias git-ls='git ls-tree -r $(git rev-parse --abbrev-ref HEAD) --name-only'
 alias find='noglob find'
+
+parent-find() {
+  local file="$1"
+  local dir="${2:-$(pwd)}"
+
+  while [[ "$dir" != "/" ]]; do
+    if [[ -e "$dir/$file" ]]; then
+      echo "$dir/$file"
+      return 0
+    fi
+    dir="$(dirname "$dir")"
+  done
+
+  # Check the root directory as a last resort
+  if [[ -e "/$file" ]]; then
+    echo "/$file"
+    return 0
+  fi
+
+  return 1
+}
+
 alias €='noglob €'
 alias €€='noglob €€'
 
@@ -207,6 +229,8 @@ alias Ð10='Ð 10'
 
 alias -g @yml='| yq eval -P'
 alias -g @json='| jq'
+
+alias package-json='echo; cat $(parent-find package.json) | yq eval -P'
 
 # --- easy xargs
 alias -g »='| xargs -n1 -d "\n"'
@@ -549,36 +573,38 @@ if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
         fi
 fi
 
-# Manjaro: offer to install missing package if command is not found
-if [[ -r /usr/share/zsh/functions/command-not-found.zsh ]]; then
+# --- Command not found handler
+
+# # Manjaro: offer to install missing package if command is not found
+# if [[ -r /usr/share/zsh/functions/command-not-found.zsh ]]; then
     # source /usr/share/zsh/functions/command-not-found.zsh
-    command_not_found_handler() {
-        local pkgs cmd="$1"
+command_not_found_handler() {
+    local pkgs cmd="$1"
 
-        pkgs=(${(f)"$(pkgfile -b -v -- "$cmd" 2>/dev/null)"})
-        if [[ -n "$pkgs" ]]; then
-            printf 'The application %s is not installed. It may be found in the following packages:\n' "$cmd"
-            printf '  %s\n' $pkgs[@]
-            setopt shwordsplit
-            pkg_array=($pkgs[@])
-            pkgname="${${(@s:/:)pkg_array}[2]}"
-            printf 'Do you want to Install package %s? (y/N) ' $pkgname
-            if read -q "choice? "; then
-                    echo
-                    echo "Executing command: pamac install --no-upgrade $pkgname"
-                    pamac install --no-upgrade $pkgname
-            else
-                    echo " "
-            fi
+    pkgs=(${(f)"$(pkgfile -b -v -- "$cmd" 2>/dev/null)"})
+    if [[ -n "$pkgs" ]]; then
+        printf 'The application %s is not installed. It may be found in the following packages:\n' "$cmd"
+        printf '  %s\n' $pkgs[@]
+        setopt shwordsplit
+        pkg_array=($pkgs[@])
+        pkgname="${${(@s:/:)pkg_array}[2]}"
+        printf 'Do you want to Install package %s? (y/N) ' $pkgname
+        if read -q "choice? "; then
+                echo
+                echo "Executing command: pamac install --no-upgrade $pkgname"
+                pamac install --no-upgrade $pkgname
         else
-            printf 'zsh: command not found: %s\n' "$cmd"
-        fi 1>&2
+                echo " "
+        fi
+    else
+        printf 'zsh: command not found: %s\n' "$cmd"
+    fi 1>&2
 
-        return 127
-    }
-
-    export PKGFILE_PROMPT_INSTALL_MISSING=1
-fi
+    return 127
+}
+export PKGFILE_PROMPT_INSTALL_MISSING=1
+# fi
+# /--- Command not found handler
 
 export PATH=./scripts:/home/stefano/.local/bin:$PATH
 
