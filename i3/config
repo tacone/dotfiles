@@ -350,28 +350,36 @@ mode "$mode_system" {
 # Resize window (you can also use the mouse for that)
 bindsym $mod+r mode "resize"
 mode "resize" {
-        # These bindings trigger as soon as you enter the resize mode
-        # Pressing left will shrink the window’s width.
-        # Pressing right will grow the window’s width.
-        # Pressing up will shrink the window’s height.
-        # Pressing down will grow the window’s height.
-        bindsym $left resize shrink width 5 px or 5 ppt
-        bindsym $down resize grow height 5 px or 5 ppt
-        bindsym $up resize shrink height 5 px or 5 ppt
-        bindsym $right resize grow width 5 px or 5 ppt
+        bindsym $left resize shrink width 2 px or 2 ppt
+        bindsym $down resize grow height 2 px or 2 ppt
+        bindsym $up resize shrink height 2 px or 2 ppt
+        bindsym $right resize grow width 2 px or 2 ppt
 
-        bindsym $alt_left resize shrink width 5 px or 5 ppt
-        bindsym $alt_down resize grow height 5 px or 5 ppt
-        bindsym $alt_up resize shrink height 5 px or 5 ppt
-        bindsym $alt_right resize grow width 5 px or 5 ppt
+        bindsym $alt_left resize shrink width 2 px or 2 ppt
+        bindsym $alt_down resize grow height 2 px or 2 ppt
+        bindsym $alt_up resize shrink height 2 px or 2 ppt
+        bindsym $alt_right resize grow width 2 px or 2 ppt
 
-        # same bindings, but for the arrow keys
-        bindsym Left resize shrink width 10 px or 10 ppt
-        bindsym Down resize grow height 10 px or 10 ppt
-        bindsym Up resize shrink height 10 px or 10 ppt
-        bindsym Right resize grow width 10 px or 10 ppt
+        bindsym Left resize shrink width 2 px or 2 ppt
+        bindsym Down resize grow height 2 px or 2 ppt
+        bindsym Up resize shrink height 2 px or 2 ppt
+        bindsym Right resize grow width 2 px or 2 ppt
 
-        # exit resize mode: Enter or Escape
+        bindsym $mod+$left resize shrink width 2 px or 2 ppt
+        bindsym $mod+$down resize grow height 2 px or 2 ppt
+        bindsym $mod+$up resize shrink height 2 px or 2 ppt
+        bindsym $mod+$right resize grow width 2 px or 2 ppt
+
+        bindsym $mod+$alt_left resize shrink width 2 px or 2 ppt
+        bindsym $mod+$alt_down resize grow height 2 px or 2 ppt
+        bindsym $mod+$alt_up resize shrink height 2 px or 2 ppt
+        bindsym $mod+$alt_right resize grow width 2 px or 2 ppt
+
+        bindsym $mod+Left resize shrink width 2 px or 2 ppt
+        bindsym $mod+Down resize grow height 2 px or 2 ppt
+        bindsym $mod+Up resize shrink height 2 px or 2 ppt
+        bindsym $mod+Right resize grow width 2 px or 2 ppt
+
         bindsym Return mode "default"
         bindsym Escape mode "default"
 }
