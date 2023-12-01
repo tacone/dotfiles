@@ -54,6 +54,6 @@ keycode  65 = space NoSymbol Return
 keycode  94 = less greater Escape greater guillemotleft guillemotright guillemotleft
 keycode  52 = z Z BackSpace Z guillemotleft less guillemotleft
 keycode  53 = x X Delete X guillemotright greater guillemotright
-! keycode  54 = c C Escape C cent copyright cent
+keycode  54 = c C Escape C cent copyright cent
 keycode  55 = v V v V leftdoublequotemark leftsinglequotemark leftdoublequotemark
 
