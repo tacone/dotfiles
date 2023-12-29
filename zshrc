@@ -368,6 +368,17 @@ insert_sudo () {
 zle -N insert-sudo insert_sudo
 bindkey "^[S" insert-sudo
 
+# Alt + w to insert watch at the beginning of the line
+
+insert_watch () {
+    local prefix="  watch -n0.5 -c"
+    BUFFER="$prefix $BUFFER"
+    CURSOR=$(($CURSOR + $#prefix + 1))
+    zle accept-line
+}
+zle -N insert-watch insert_watch
+bindkey "^[w" "insert-watch"
+
 # ^Z to foreground the last suspended job.
 foreground-current-job() { fg; }
 zle -N foreground-current-job
