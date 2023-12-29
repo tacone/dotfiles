@@ -1,12 +1,7 @@
 alias g="git commit -m"
 alias zshrc='code ~/.zshrc'
-alias fname="noglob find -name"
 alias -g each='-print0 | xargs -0 -I {}'
 alias youtube-dl='youtube-dl --embed-thumbnail -x -i --audio-format=mp3'
-alias m='$HOME/Applications/meteor/meteor'
 alias own='sudo chown `whoami`:`whoami`'
-alias phpunit='./vendor/bin/phpunit'
-alias my='mysql -uroot'
-alias sequelize='node_modules/.bin/sequelize'
 alias gstp='git status --porcelain'
 alias httpf='http -F'
