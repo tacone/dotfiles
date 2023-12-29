@@ -371,7 +371,7 @@ bindkey "^[S" insert-sudo
 # Alt + w to insert watch at the beginning of the line
 
 insert_watch () {
-    local prefix="  watch -n0.5 -c"
+    local prefix="  watch -n0.5 -p -c grc --colour=on"
     BUFFER="$prefix $BUFFER"
     CURSOR=$(($CURSOR + $#prefix + 1))
     zle accept-line
