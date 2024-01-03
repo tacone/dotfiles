@@ -1,0 +1,109 @@
+#!/usr/bin/zsh
+
+if [ -n "$INTERPOLATE_GIT_LOG" ]; then
+    SCRIPT_DIR="$( cd "$( dirname $0 )" >/dev/null 2>&1 && pwd )"
+    SCRIPT="$SCRIPT_DIR/$(basename $0)"
+
+    # make aliases for all git commands
+
+    # make a function for each alias
+    while IFS= read -r line
+    do
+        # extract the alias name
+        local alias_name=$(echo "$line" | sed -nE 's#^([^=]+)=.*#\1#p')
+        # echo alias_name: $alias_name
+        # # extract the alias command
+        local alias_command=$(echo "$line" | sed -nE 's#^[^=]+=([^;]+)#\1#p')
+
+        #if alias is wrapped with '' then remove them
+        if [[ $alias_command == *"'"* ]]; then
+            alias_command=$(echo $alias_command | sed -nE "s#^'(.*)'#\1#p")
+        elif [[ $alias_command == *'"'* ]]; then
+            alias_command=$(echo $alias_command | sed -nE 's#^"(.*)"#\1#p')
+        fi
+
+        # echo alias_command: $alias_command
+
+        # if the alias contains %h
+        is_short=$(echo "$alias_command" | grep -c '%h')
+        local short_hash_env=''
+
+        if [[ is_short -eq 1 ]]; then
+            # replace %h with %H
+            alias_command=$(echo "$alias_command" | sed -nE 's/%h/%H/p')
+            short_hash_env='GIT_SHORT_HASH=1'
+        fi
+
+        # create a function for the alias
+        fun="function $alias_name() { $alias_command --color "\"'$@'\"" | $short_hash_env $SCRIPT; }"
+        eval "$fun"
+        unalias "$alias_name"
+
+    done <<< $(alias | grep 'git log')
+
+    return
+fi
+
+set -e # exit if it's not a git repository
+
+function log () {
+    local remote=$(git config --get remote.origin.url)
+    local platform=''
+    local repo=''
+    local org=''
+    local project=''
+
+    # determine the platform based on the remote URL
+    if [[ $remote == *"github.com"* ]]; then
+        platform="github.com"
+    elif [[ $remote == *"gitlab.com"* ]]; then
+        platform="gitlab.com"
+    elif [[ $remote == *"ssh.dev.azure.com"* ]]; then
+        platform="dev.azure.com"
+    fi
+
+    # extract the user and repo based on the platform
+    if [[ $platform == "github.com" ]] || [[ $platform == "gitlab.com" ]]; then
+        repo=$(echo $remote | sed -nE 's#.+:([^.]+).git#\1#p')
+    elif [[ $platform == "dev.azure.com" ]]; then
+        # Azure uses a different format for the repository URL
+        org=$(echo $remote | cut -d/ -f2)
+        project=$(echo $remote | cut -d/ -f3)
+        repo=$(echo $remote | cut -d/ -f4)
+    fi
+
+    while IFS= read -r line
+    do
+        if [[ -z "$platform" ]]; then
+            echo -e "$line"
+            continue
+        fi
+
+        local sanitized_line=$(echo "$line" |sed -e 's/\x1b\[[0-9;]*m//g')
+        # hash=$(echo "$sanitized_line" | sed -n -e 's/^[^0-9a-f]*$(echo -e  "\e]8;;$url\a$short_hash\e]8;;\a")\([0-9a-f]\{40\}\).*/\1/p' )
+        local hash=$(echo "$sanitized_line" | sed -n -e 's/^.*\([0-9a-f]\{40\}\).*/\1/p' )
+        local short_hash=${hash:0:8}
+
+        if [[ -z "$hash" ]]; then
+            echo -e "$line"
+            continue
+        fi
+
+        if [[ $platform == "dev.azure.com" ]]; then
+            # Azure uses a different URL structure
+            url="https://dev.azure.com/$org/$project/_git/$repo/commit/$hash"
+        else
+            url="https://$platform/$repo/commit/$short_hash"
+        fi
+
+        local link_text="$hash"
+        [[ $GIT_SHORT_HASH -eq 1 ]] && link_text="$short_hash"
+
+        local link=$(echo -e  "\e]8;;$url\a$link_text\e]8;;\a")
+
+        # print the modified line
+        echo "$line" | sed "s|$hash|"$link"|g" | cat
+    done
+}
+
+log | less

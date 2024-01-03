@@ -107,6 +107,8 @@ source $HOME/.aliases
 test -f $HOME/.custom-aliases || touch $HOME/.custom-aliases
 source $HOME/.custom-aliases
 
+[[ -f ~/.bin/linkify-git-log ]] && INTERPOLATE_GIT_LOG=1 source ~/.bin/linkify-git-log
+
 byobu_col () {
     #!/bin/sh -e
     #
