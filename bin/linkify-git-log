@@ -1,12 +1,13 @@
 #!/usr/bin/zsh
 
 if [ -n "$INTERPOLATE_GIT_LOG" ]; then
+    # make aliases for all git commands
+
     SCRIPT_DIR="$( cd "$( dirname $0 )" >/dev/null 2>&1 && pwd )"
     SCRIPT="$SCRIPT_DIR/$(basename $0)"
 
-    # make aliases for all git commands
+    # replace every git log alias with a function
 
-    # make a function for each alias
     while IFS= read -r line
     do
         # extract the alias name
@@ -72,6 +73,7 @@ function log () {
         repo=$(echo $remote | cut -d/ -f4)
     fi
 
+
     while IFS= read -r line
     do
         if [[ -z "$platform" ]]; then
@@ -79,11 +81,18 @@ function log () {
             continue
         fi
 
-        local sanitized_line=$(echo "$line" |sed -e 's/\x1b\[[0-9;]*m//g')
-        # hash=$(echo "$sanitized_line" | sed -n -e 's/^[^0-9a-f]*$(echo -e  "\e]8;;$url\a$short_hash\e]8;;\a")\([0-9a-f]\{40\}\).*/\1/p' )
-        local hash=$(echo "$sanitized_line" | sed -n -e 's/^.*\([0-9a-f]\{40\}\).*/\1/p' )
+        local hash=''
+
+        # remove all non-printable characters
+        local sanitized_line=$( tr -dc '[[:print:][:space:]]' <<< "$line")
+
+        # extract the hash from the line
+        [[ $sanitized_line =~ '^.*([0-9a-f]{40}).*' ]] && hash=${match[1]}
+
+        # extract the short hash
         local short_hash=${hash:0:8}
 
+        # if the line doesn't contain a hash then print it as is
         if [[ -z "$hash" ]]; then
             echo -e "$line"
             continue
@@ -99,10 +108,10 @@ function log () {
         local link_text="$hash"
         [[ $GIT_SHORT_HASH -eq 1 ]] && link_text="$short_hash"
 
-        local link=$(echo -e  "\e]8;;$url\a$link_text\e]8;;\a")
+        link=$'\e]8;;'"$url"$'\a'"$link_text"$'\e]8;;\a'
 
         # print the modified line
-        echo "$line" | sed "s|$hash|"$link"|g" | cat
+        echo -e ${line//$hash/$link}
     done
 }
 
