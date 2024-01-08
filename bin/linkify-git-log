@@ -30,13 +30,10 @@ if [ -n "$INTERPOLATE_GIT_LOG" ]; then
         local alias_name=$(get_alias_name "$line")
         local alias_command=$(get_alias_command "$line")
 
-        # if the alias contains %h
-        local is_short=0
-        [[ $alias_command == *'%h'* ]] && is_short=1
-
         local short_hash_env=''
 
-        if [[ is_short -eq 1 ]]; then
+        # if the alias contains %h then it uses short hashes
+        if [[ $alias_command == *'%h'* ]]; then
             # replace %h with %H
             alias_command=${alias_command//\%h/%H}
             short_hash_env='GIT_SHORT_HASH=1'
@@ -46,10 +43,9 @@ if [ -n "$INTERPOLATE_GIT_LOG" ]; then
         local fun="function $alias_name() { $alias_command --color "\"'$@'\"" | $short_hash_env $SCRIPT; }"
         eval "$fun"
         unalias "$alias_name"
-
-        # alias  | grep -i "git status" | grep -v porcelain
-
     done <<< $(alias | grep 'git log')
+
+    # alias  | grep -i "git status" | grep -v porcelain
 
     return
 fi
