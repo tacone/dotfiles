@@ -1,20 +1,24 @@
 #!/usr/bin/zsh
 
-function get_alias_name() {
-    echo ${1%%=*}
+
+# reads global variable $line and sets $alias_name, $alias_command, $alias_full_command
+function parse_alias() {
+    alias_name=${line%%=*}
+    alias_command=${line#*=};
+
+    #if alias is wrapped with quotes then remove them
+    if [[ $alias_command == *"'"* ]]; then
+        alias_command=${alias_command#\'}
+        alias_command=${alias_command%\'}
+    elif [[ $alias_command == *'"'* ]]; then
+        alias_command=${alias_command#\"}
+        alias_command=${alias_command%\"}
+    fi
 }
 
-function get_alias_command() {
-    local alias_command=${line#*=};
-
-    #if alias is wrapped with '' then remove them
-    if [[ $alias_command == *"'"* ]]; then
-        alias_command=$(echo $alias_command | sed -nE "s#^'(.*)'#\1#p")
-    elif [[ $alias_command == *'"'* ]]; then
-        alias_command=$(echo $alias_command | sed -nE 's#^"(.*)"#\1#p')
-    fi
-
-    echo "$alias_command"
+function replace_alias_with () {
+    eval "$1"
+    unalias "$alias_name"
 }
 
 if [ -n "$INTERPOLATE_GIT_LOG" ]; then
@@ -27,23 +31,21 @@ if [ -n "$INTERPOLATE_GIT_LOG" ]; then
 
     while IFS= read -r line
     do
-        local alias_name=$(get_alias_name "$line")
-        local alias_command=$(get_alias_command "$line")
-
-        local short_hash_env=''
+        parse_alias
 
         # if the alias contains %h then it uses short hashes
+        short_hash_env=''
         if [[ $alias_command == *'%h'* ]]; then
             # replace %h with %H
             alias_command=${alias_command//\%h/%H}
             short_hash_env='GIT_SHORT_HASH=1'
         fi
 
-        # create a function for the alias
-        local fun="function $alias_name() { $alias_command --color "\"'$@'\"" | $short_hash_env $SCRIPT; }"
-        eval "$fun"
-        unalias "$alias_name"
+        local cmd="$alias_command"' --color=always "$@"'
+
+        replace_alias_with "function $alias_name() { $cmd | $short_hash_env $SCRIPT; }"
     done <<< $(alias | grep 'git log')
+
 
     # alias  | grep -i "git status" | grep -v porcelain
 
@@ -104,8 +106,17 @@ function get_platform () {
     echo "$platform"
 }
 
+function get_remote () {
+    # todo: make this work
+    git config --get remote.origin.url
+    local return_code="$?"
+    if [[ $return_code -ne 0 ]]; then
+        exit $return_code
+    fi
+}
+
 function log () {
-    local remote=$(git config --get remote.origin.url)
+    local remote=$(get_remote)
     local repository_url=$(get_repository_url $remote)
     local platform=$(get_platform $remote)
 
