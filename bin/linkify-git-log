@@ -47,8 +47,8 @@ fi
 
 set -e # exit if it's not a git repository
 
-function log () {
-    local remote=$(git config --get remote.origin.url)
+function get_repository_url () {
+    local remote=$1
     local platform=''
     local repo=''
     local org=''
@@ -73,6 +73,36 @@ function log () {
         repo=$(echo $remote | cut -d/ -f4)
     fi
 
+    if [[ $platform == "dev.azure.com" ]]; then
+        # Azure uses a different URL structure
+        url="https://dev.azure.com/$org/$project/_git/$repo"
+    else
+        url="https://$platform/$repo"
+    fi
+
+    echo "$url"
+}
+
+function get_platform () {
+    local remote=$1
+    local platform=''
+
+    # determine the platform based on the remote URL
+    if [[ $remote == *"github.com"* ]]; then
+        platform="github.com"
+    elif [[ $remote == *"gitlab.com"* ]]; then
+        platform="gitlab.com"
+    elif [[ $remote == *"ssh.dev.azure.com"* ]]; then
+        platform="dev.azure.com"
+    fi
+
+    echo "$platform"
+}
+
+function log () {
+    local remote=$(git config --get remote.origin.url)
+    local repository_url=$(get_repository_url $remote)
+    local platform=$(get_platform $remote)
 
     while IFS= read -r line
     do
@@ -100,9 +130,9 @@ function log () {
 
         if [[ $platform == "dev.azure.com" ]]; then
             # Azure uses a different URL structure
-            url="https://dev.azure.com/$org/$project/_git/$repo/commit/$hash"
+            url="$repository_url/commit/$hash"
         else
-            url="https://$platform/$repo/commit/$short_hash"
+            url="repository_url/commit/$short_hash"
         fi
 
         local link_text="$hash"
