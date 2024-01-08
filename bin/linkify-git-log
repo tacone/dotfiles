@@ -1,5 +1,22 @@
 #!/usr/bin/zsh
 
+function get_alias_name() {
+    echo ${1%%=*}
+}
+
+function get_alias_command() {
+    local alias_command=${line#*=};
+
+    #if alias is wrapped with '' then remove them
+    if [[ $alias_command == *"'"* ]]; then
+        alias_command=$(echo $alias_command | sed -nE "s#^'(.*)'#\1#p")
+    elif [[ $alias_command == *'"'* ]]; then
+        alias_command=$(echo $alias_command | sed -nE 's#^"(.*)"#\1#p')
+    fi
+
+    echo "$alias_command"
+}
+
 if [ -n "$INTERPOLATE_GIT_LOG" ]; then
     # make aliases for all git commands
 
@@ -10,35 +27,27 @@ if [ -n "$INTERPOLATE_GIT_LOG" ]; then
 
     while IFS= read -r line
     do
-        # extract the alias name
-        local alias_name=$(echo "$line" | sed -nE 's#^([^=]+)=.*#\1#p')
-        # echo alias_name: $alias_name
-        # # extract the alias command
-        local alias_command=$(echo "$line" | sed -nE 's#^[^=]+=([^;]+)#\1#p')
-
-        #if alias is wrapped with '' then remove them
-        if [[ $alias_command == *"'"* ]]; then
-            alias_command=$(echo $alias_command | sed -nE "s#^'(.*)'#\1#p")
-        elif [[ $alias_command == *'"'* ]]; then
-            alias_command=$(echo $alias_command | sed -nE 's#^"(.*)"#\1#p')
-        fi
-
-        # echo alias_command: $alias_command
+        local alias_name=$(get_alias_name "$line")
+        local alias_command=$(get_alias_command "$line")
 
         # if the alias contains %h
-        is_short=$(echo "$alias_command" | grep -c '%h')
+        local is_short=0
+        [[ $alias_command == *'%h'* ]] && is_short=1
+
         local short_hash_env=''
 
         if [[ is_short -eq 1 ]]; then
             # replace %h with %H
-            alias_command=$(echo "$alias_command" | sed -nE 's/%h/%H/p')
+            alias_command=${alias_command//\%h/%H}
             short_hash_env='GIT_SHORT_HASH=1'
         fi
 
         # create a function for the alias
-        fun="function $alias_name() { $alias_command --color "\"'$@'\"" | $short_hash_env $SCRIPT; }"
+        local fun="function $alias_name() { $alias_command --color "\"'$@'\"" | $short_hash_env $SCRIPT; }"
         eval "$fun"
         unalias "$alias_name"
+
+        # alias  | grep -i "git status" | grep -v porcelain
 
     done <<< $(alias | grep 'git log')
 
@@ -104,6 +113,13 @@ function log () {
     local repository_url=$(get_repository_url $remote)
     local platform=$(get_platform $remote)
 
+    # todo: handle the case where the remote is not a git repository
+    #       while replacing the hash with short hash where appropriate
+
+    # echo remote: $remote
+    # echo repository_url: $repository_url
+    # echo platform: $platform
+
     while IFS= read -r line
     do
         if [[ -z "$platform" ]]; then
@@ -132,7 +148,7 @@ function log () {
             # Azure uses a different URL structure
             url="$repository_url/commit/$hash"
         else
-            url="repository_url/commit/$short_hash"
+            url="$repository_url/commit/$short_hash"
         fi
 
         local link_text="$hash"
