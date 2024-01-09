@@ -1,24 +1,24 @@
 #!/usr/bin/zsh
 
 
-# reads global variable $line and sets $alias_name, $alias_command, $alias_full_command
+# reads global variable $__line and sets $__alias_name, $__alias_command, $alias_full_command
 function parse_alias() {
-    alias_name=${line%%=*}
-    alias_command=${line#*=};
+    __alias_name=${__line%%=*}
+    __alias_command=${__line#*=};
 
     #if alias is wrapped with quotes then remove them
-    if [[ $alias_command == *"'"* ]]; then
-        alias_command=${alias_command#\'}
-        alias_command=${alias_command%\'}
-    elif [[ $alias_command == *'"'* ]]; then
-        alias_command=${alias_command#\"}
-        alias_command=${alias_command%\"}
+    if [[ $__alias_command == *"'"* ]]; then
+        __alias_command=${__alias_command#\'}
+        __alias_command=${__alias_command%\'}
+    elif [[ $__alias_command == *'"'* ]]; then
+        __alias_command=${__alias_command#\"}
+        __alias_command=${__alias_command%\"}
     fi
 }
 
 function replace_alias_with () {
     eval "$1"
-    unalias "$alias_name"
+    unalias "$__alias_name"
 }
 
 if [ -n "$INTERPOLATE_GIT_LOG" ]; then
@@ -29,28 +29,28 @@ if [ -n "$INTERPOLATE_GIT_LOG" ]; then
 
     # replace every git log alias with a function
 
-    while IFS= read -r line
+    while IFS= read -r __line
     do
         parse_alias
 
         # if the alias contains %h then it uses short hashes
         short_hash_env=''
-        if [[ $alias_command == *'%h'* ]]; then
+        if [[ $__alias_command == *'%h'* ]]; then
             # replace %h with %H
-            alias_command=${alias_command//\%h/%H}
+            __alias_command=${__alias_command//\%h/%H}
             short_hash_env='GIT_SHORT_HASH=1'
         fi
 
-        local cmd="$alias_command"' --color=always "$@"'
+        local cmd="$__alias_command"' --color=always "$@"'
 
-        replace_alias_with "function $alias_name() { $cmd | $short_hash_env $SCRIPT log; }"
+        replace_alias_with "function $__alias_name() { $cmd | $short_hash_env $SCRIPT log; }"
     done <<< $(alias | grep 'git log')
 
-    while IFS= read -r line
+    while IFS= read -r __line
     do
         parse_alias
 
-        replace_alias_with "function $alias_name() { $SCRIPT status; $alias_command; }"
+        replace_alias_with "function $__alias_name() { $SCRIPT status; $__alias_command; }"
     done <<< $(alias  | grep -i "git status" | grep -v porcelain)
 
 
@@ -161,17 +161,17 @@ function log () {
     # echo repository_url: $repository_url
     # echo platform: $platform
 
-    while IFS= read -r line
+    while IFS= read -r __line
     do
         if [[ -z "$platform" ]]; then
-            echo -e "$line"
+            echo -e "$__line"
             continue
         fi
 
         local hash=''
 
         # remove all non-printable characters
-        local sanitized_line=$( tr -dc '[[:print:][:space:]]' <<< "$line")
+        local sanitized_line=$( tr -dc '[[:print:][:space:]]' <<< "$__line")
 
         # extract the hash from the line
         [[ $sanitized_line =~ '^.*([0-9a-f]{40}).*' ]] && hash=${match[1]}
@@ -181,7 +181,7 @@ function log () {
 
         # if the line doesn't contain a hash then print it as is
         if [[ -z "$hash" ]]; then
-            echo -e "$line"
+            echo -e "$__line"
             continue
         fi
 
@@ -198,7 +198,7 @@ function log () {
         link=$'\e]8;;'"$url"$'\a'"$link_text"$'\e]8;;\a'
 
         # print the modified line
-        echo -e ${line//$hash/$link}
+        echo -e ${__line//$hash/$link}
     done
 }
 
