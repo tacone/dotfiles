@@ -2,11 +2,13 @@
 
 
 # reads global variable $__line and sets $__alias_name, $__alias_command, $alias_full_command
+
 function parse_alias() {
     __alias_name=${__line%%=*}
     __alias_command=${__line#*=};
 
-    #if alias is wrapped with quotes then remove them
+    # if the alias is wrapped with quotes then remove them
+
     if [[ $__alias_command == *"'"* ]]; then
         __alias_command=${__alias_command#\'}
         __alias_command=${__alias_command%\'}
@@ -22,6 +24,7 @@ function replace_alias_with () {
 }
 
 if [ -n "$INTERPOLATE_GIT_LOG" ]; then
+
     # make aliases for all git commands
 
     SCRIPT_DIR="$( cd "$( dirname $0 )" >/dev/null 2>&1 && pwd )"
@@ -34,9 +37,12 @@ if [ -n "$INTERPOLATE_GIT_LOG" ]; then
         parse_alias
 
         # if the alias contains %h then it uses short hashes
+
         short_hash_env=''
         if [[ $__alias_command == *'%h'* ]]; then
+
             # replace %h with %H
+
             __alias_command=${__alias_command//\%h/%H}
             short_hash_env='GIT_SHORT_HASH=1'
         fi
@@ -76,17 +82,22 @@ function get_repository_url () {
     fi
 
     # extract the user and repo based on the platform
+
     if [[ $platform == "github.com" ]] || [[ $platform == "gitlab.com" ]]; then
         repo=$(echo $remote | sed -nE 's#.+:([^.]+).git#\1#p')
     elif [[ $platform == "dev.azure.com" ]]; then
+
         # Azure uses a different format for the repository URL
+
         org=$(echo $remote | cut -d/ -f2)
         project=$(echo $remote | cut -d/ -f3)
         repo=$(echo $remote | cut -d/ -f4)
     fi
 
     if [[ $platform == "dev.azure.com" ]]; then
+
         # Azure uses a different URL structure
+
         url="https://dev.azure.com/$org/$project/_git/$repo"
     else
         url="https://$platform/$repo"
@@ -113,7 +124,9 @@ function print_branch_link () {
     local url=$(get_repository_url $remote)
     local link="$url/tree/$branch"
     if [[ $platform == "dev.azure.com" ]]; then
+
         # Azure uses a different URL structure for branches
+
         local link="$url?version=GB$branch"
     fi
     echo
@@ -129,6 +142,7 @@ function get_platform () {
     local platform=''
 
     # determine the platform based on the remote URL
+
     if [[ $remote == *"github.com"* ]]; then
         platform="github.com"
     elif [[ $remote == *"gitlab.com"* ]]; then
@@ -141,9 +155,11 @@ function get_platform () {
 }
 
 function get_remote () {
-    # todo: make this work
     git config --get remote.origin.url
     local return_code="$?"
+
+    # todo: make this work
+
     if [[ $return_code -ne 0 ]]; then
         exit $return_code
     fi
@@ -157,10 +173,6 @@ function log () {
     # todo: handle the case where the remote is not a git repository
     #       while replacing the hash with short hash where appropriate
 
-    # echo remote: $remote
-    # echo repository_url: $repository_url
-    # echo platform: $platform
-
     while IFS= read -r __line
     do
         if [[ -z "$platform" ]]; then
@@ -171,22 +183,28 @@ function log () {
         local hash=''
 
         # remove all non-printable characters
+
         local sanitized_line=$( tr -dc '[[:print:][:space:]]' <<< "$__line")
 
         # extract the hash from the line
+
         [[ $sanitized_line =~ '^.*([0-9a-f]{40}).*' ]] && hash=${match[1]}
 
         # extract the short hash
+
         local short_hash=${hash:0:8}
 
         # if the line doesn't contain a hash then print it as is
+
         if [[ -z "$hash" ]]; then
             echo -e "$__line"
             continue
         fi
 
         if [[ $platform == "dev.azure.com" ]]; then
+
             # Azure uses a different URL structure
+
             url="$repository_url/commit/$hash"
         else
             url="$repository_url/commit/$short_hash"
@@ -195,9 +213,10 @@ function log () {
         local link_text="$hash"
         [[ $GIT_SHORT_HASH -eq 1 ]] && link_text="$short_hash"
 
-        link=$'\e]8;;'"$url"$'\a'"$link_text"$'\e]8;;\a'
+        link=$'\e]8;;'"$url"$'\a'"$link_text"$'\e]8;;\a' # in-lined for speed
 
         # print the modified line
+
         echo -e ${__line//$hash/$link}
     done
 }
