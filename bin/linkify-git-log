@@ -43,11 +43,16 @@ if [ -n "$INTERPOLATE_GIT_LOG" ]; then
 
         local cmd="$alias_command"' --color=always "$@"'
 
-        replace_alias_with "function $alias_name() { $cmd | $short_hash_env $SCRIPT; }"
+        replace_alias_with "function $alias_name() { $cmd | $short_hash_env $SCRIPT log; }"
     done <<< $(alias | grep 'git log')
 
+    while IFS= read -r line
+    do
+        parse_alias
 
-    # alias  | grep -i "git status" | grep -v porcelain
+        replace_alias_with "function $alias_name() { $SCRIPT status; $alias_command; }"
+    done <<< $(alias  | grep -i "git status" | grep -v porcelain)
+
 
     return
 fi
@@ -88,6 +93,35 @@ function get_repository_url () {
     fi
 
     echo "$url"
+}
+
+function print_link() {
+    local url=$1
+    local link_text=$2
+    local link=$'\e[94m\e]8;;'"$url"$'\a'"$link_text"$'\e]8;;\a\e[0m'
+    echo -n $link
+}
+
+function get_current_branch () {
+    git rev-parse --abbrev-ref HEAD
+}
+
+function print_branch_link () {
+    local branch=$(get_current_branch)
+    local remote=$(get_remote)
+    local platform=$(get_platform $remote)
+    local url=$(get_repository_url $remote)
+    local link="$url/tree/$branch"
+    if [[ $platform == "dev.azure.com" ]]; then
+        # Azure uses a different URL structure for branches
+        local link="$url?version=GB$branch"
+    fi
+    echo
+    print_link $link "$branch on $platform"
+    echo -n " [ "
+    print_link $url "default branch"
+    echo " ]"
+    echo
 }
 
 function get_platform () {
@@ -168,4 +202,8 @@ function log () {
     done
 }
 
-log | less
+if [[ $1 == 'log' ]]; then
+    log | less
+elif [[ $1 == 'status' ]]; then
+    print_branch_link
+fi
