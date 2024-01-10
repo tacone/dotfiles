@@ -4,18 +4,21 @@
 # reads global variable $__line and sets $__alias_name, $__alias_command, $alias_full_command
 
 function parse_alias() {
-    __alias_name=${__line%%=*}
-    __alias_command=${__line#*=};
+    local name=${__line%%=*}
+    local command=${__line#*=};
 
     # if the alias is wrapped with quotes then remove them
 
-    if [[ $__alias_command == *"'"* ]]; then
-        __alias_command=${__alias_command#\'}
-        __alias_command=${__alias_command%\'}
-    elif [[ $__alias_command == *'"'* ]]; then
-        __alias_command=${__alias_command#\"}
-        __alias_command=${__alias_command%\"}
+    if [[ $command == *"'"* ]]; then
+        command=${command#\'}
+        command=${command%\'}
+    elif [[ $command == *'"'* ]]; then
+        command=${command#\"}
+        command=${command%\"}
     fi
+
+    __alias_name="$name"
+    __alias_command="$command"
 }
 
 function replace_alias_with () {
@@ -73,13 +76,9 @@ function get_repository_url () {
     local project=''
 
     # determine the platform based on the remote URL
-    if [[ $remote == *"github.com"* ]]; then
-        platform="github.com"
-    elif [[ $remote == *"gitlab.com"* ]]; then
-        platform="gitlab.com"
-    elif [[ $remote == *"ssh.dev.azure.com"* ]]; then
-        platform="dev.azure.com"
-    fi
+    [[ $remote == *"github.com"* ]] && platform="github.com"
+    [[ $remote == *"gitlab.com"* ]] && platform="gitlab.com"
+    [[ $remote == *"ssh.dev.azure.com"* ]] && platform="dev.azure.com"
 
     # extract the user and repo based on the platform
 
@@ -221,8 +220,5 @@ function log () {
     done
 }
 
-if [[ $1 == 'log' ]]; then
-    log | less
-elif [[ $1 == 'status' ]]; then
-    print_branch_link
-fi
+[[ $1 == 'log' ]] && log | less
+[[ $1 == 'status' ]] && print_branch_link
