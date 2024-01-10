@@ -51,14 +51,18 @@ if [[ -n "$INTERPOLATE_GIT_LOG" ]]; then
 
         local cmd="$__alias_command"' --color=always "$@"'
 
-        replace_alias_with "function $__alias_name() { $cmd | $short_hash_env $SCRIPT log; }"
+        replace_alias_with "
+            function $__alias_name() { $cmd | $short_hash_env $SCRIPT log; }
+        "
     done <<< $(alias | grep 'git log')
 
     # replace every git status alias with a function with the same name
     while IFS= read -r __line
     do
         parse_alias
-        replace_alias_with "function $__alias_name() { $SCRIPT status; $__alias_command; }"
+        replace_alias_with "
+            function $__alias_name() { $SCRIPT status; $__alias_command; }
+        "
     done <<< $(alias  | grep -i "git status" | grep -v porcelain)
 
     return
