@@ -1,7 +1,5 @@
 #!/usr/bin/zsh
 
-set -e # exit if it's not a git repository
-
 # this function reads global variables:
 # - $__line
 # sets global variables:
@@ -59,8 +57,7 @@ if [[ -n "$INTERPOLATE_GIT_LOG" ]]; then
     # replace every git status alias with a function with the same name
     while IFS= read -r __line
     do
-        parse_alias
-        replace_alias_with "
+        parse_alias && replace_alias_with "
             function $__alias_name() { $SCRIPT status; $__alias_command; }
         "
     done <<< $(alias  | grep -i "git status" | grep -v porcelain)
