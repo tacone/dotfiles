@@ -1,14 +1,18 @@
 #!/usr/bin/zsh
 
+set -e # exit if it's not a git repository
 
-# reads global variable $__line and sets $__alias_name, $__alias_command, $alias_full_command
-
+# this function reads global variables:
+# - $__line
+# sets global variables:
+# - $__alias_name
+# - $__alias_command
+#- $alias_full_command
 function parse_alias() {
     local name=${__line%%=*}
     local command=${__line#*=};
 
     # if the alias is wrapped with quotes then remove them
-
     if [[ $command == *"'"* ]]; then
         command=${command#\'}
         command=${command%\'}
@@ -26,26 +30,21 @@ function replace_alias_with () {
     unalias "$__alias_name"
 }
 
-if [ -n "$INTERPOLATE_GIT_LOG" ]; then
-
-    # make aliases for all git commands
+if [[ -n "$INTERPOLATE_GIT_LOG" ]]; then
 
     SCRIPT_DIR="$( cd "$( dirname $0 )" >/dev/null 2>&1 && pwd )"
     SCRIPT="$SCRIPT_DIR/$(basename $0)"
 
-    # replace every git log alias with a function
-
+    # replace every git log alias with a function with the same name
     while IFS= read -r __line
     do
         parse_alias
 
         # if the alias contains %h then it uses short hashes
-
         short_hash_env=''
         if [[ $__alias_command == *'%h'* ]]; then
 
-            # replace %h with %H
-
+            # replace %h with %H to get the full hashes
             __alias_command=${__alias_command//\%h/%H}
             short_hash_env='GIT_SHORT_HASH=1'
         fi
@@ -55,18 +54,15 @@ if [ -n "$INTERPOLATE_GIT_LOG" ]; then
         replace_alias_with "function $__alias_name() { $cmd | $short_hash_env $SCRIPT log; }"
     done <<< $(alias | grep 'git log')
 
+    # replace every git status alias with a function with the same name
     while IFS= read -r __line
     do
         parse_alias
-
         replace_alias_with "function $__alias_name() { $SCRIPT status; $__alias_command; }"
     done <<< $(alias  | grep -i "git status" | grep -v porcelain)
 
-
     return
 fi
-
-set -e # exit if it's not a git repository
 
 function get_repository_url () {
     local remote=$1
@@ -81,26 +77,20 @@ function get_repository_url () {
     [[ $remote == *"ssh.dev.azure.com"* ]] && platform="dev.azure.com"
 
     # extract the user and repo based on the platform
-
     if [[ $platform == "github.com" ]] || [[ $platform == "gitlab.com" ]]; then
         repo=$(echo $remote | sed -nE 's#.+:([^.]+).git#\1#p')
+
+        url="https://$platform/$repo"
+
     elif [[ $platform == "dev.azure.com" ]]; then
-
-        # Azure uses a different format for the repository URL
-
         org=$(echo $remote | cut -d/ -f2)
         project=$(echo $remote | cut -d/ -f3)
         repo=$(echo $remote | cut -d/ -f4)
-    fi
-
-    if [[ $platform == "dev.azure.com" ]]; then
-
-        # Azure uses a different URL structure
 
         url="https://dev.azure.com/$org/$project/_git/$repo"
-    else
-        url="https://$platform/$repo"
     fi
+
+
 
     echo "$url"
 }
@@ -122,10 +112,8 @@ function print_branch_link () {
     local platform=$(get_platform $remote)
     local url=$(get_repository_url $remote)
     local link="$url/tree/$branch"
+
     if [[ $platform == "dev.azure.com" ]]; then
-
-        # Azure uses a different URL structure for branches
-
         local link="$url?version=GB$branch"
     fi
     echo
@@ -141,7 +129,6 @@ function get_platform () {
     local platform=''
 
     # determine the platform based on the remote URL
-
     if [[ $remote == *"github.com"* ]]; then
         platform="github.com"
     elif [[ $remote == *"gitlab.com"* ]]; then
@@ -182,28 +169,21 @@ function log () {
         local hash=''
 
         # remove all non-printable characters
-
         local sanitized_line=$( tr -dc '[[:print:][:space:]]' <<< "$__line")
 
         # extract the hash from the line
-
         [[ $sanitized_line =~ '^.*([0-9a-f]{40}).*' ]] && hash=${match[1]}
 
         # extract the short hash
-
         local short_hash=${hash:0:8}
 
         # if the line doesn't contain a hash then print it as is
-
         if [[ -z "$hash" ]]; then
             echo -e "$__line"
             continue
         fi
 
         if [[ $platform == "dev.azure.com" ]]; then
-
-            # Azure uses a different URL structure
-
             url="$repository_url/commit/$hash"
         else
             url="$repository_url/commit/$short_hash"
@@ -215,7 +195,6 @@ function log () {
         link=$'\e]8;;'"$url"$'\a'"$link_text"$'\e]8;;\a' # in-lined for speed
 
         # print the modified line
-
         echo -e ${__line//$hash/$link}
     done
 }
