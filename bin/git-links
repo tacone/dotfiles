@@ -62,10 +62,21 @@ if [[ -n "$INTERPOLATE_GIT_LOG" ]]; then
         "
     done <<< $(alias  | grep -i "git status" | grep -v porcelain)
 
+    # todo: this doesn't work for me as I am not using the aliases for push usually
+    while IFS= read -r __line
+    do
+        parse_alias
+        replace_alias_with "
+            function $__alias_name() { $__alias_command; $SCRIPT push; }
+        "
+    done <<< $(alias  | grep -i "git push" | grep -v -P '[!]')
+
     return
 fi
 
-function get_repository_url () {
+# todo: move this before executing functions
+
+function get_url () {
     local remote=$1
     local platform=''
     local repo=''
@@ -77,23 +88,29 @@ function get_repository_url () {
     [[ $remote == *"gitlab.com"* ]] && platform="gitlab.com"
     [[ $remote == *"ssh.dev.azure.com"* ]] && platform="dev.azure.com"
 
+
     # extract the user and repo based on the platform
     if [[ $platform == "github.com" ]] || [[ $platform == "gitlab.com" ]]; then
-        repo=$(echo $remote | sed -nE 's#.+:([^.]+).git#\1#p')
+        org=$(echo $remote | sed -nE 's#.*[/:]([^/]+)/([^/]+).*#\1#p' )
+        repo=$(echo $remote | sed -nE 's#.*[/:]([^/]+)/([^/]+).*#\2#p' | sed 's/.git$//')
 
-        url="https://$platform/$repo"
+        org_url="https://$platform/$org"
+        project_url="https://$platform/$org/$repo"
+        repository_url="https://$platform/$org/$repo"
 
     elif [[ $platform == "dev.azure.com" ]]; then
         org=$(echo $remote | cut -d/ -f2)
         project=$(echo $remote | cut -d/ -f3)
         repo=$(echo $remote | cut -d/ -f4)
 
-        url="https://dev.azure.com/$org/$project/_git/$repo"
+        org_url="https://dev.azure.com/$org"
+        project_url="https://dev.azure.com/$org/$project"
+        repository_url="https://dev.azure.com/$org/$project/_git/$repo"
     fi
 
-
-
-    echo "$url"
+    [[ $2 == "org" ]] && echo "$org_url"
+    [[ $2 == "project" ]] && echo "$project_url"
+    [[ $2 == "repository" ]] && echo "$repository_url"
 }
 
 function print_link() {
@@ -107,20 +124,41 @@ function get_current_branch () {
     git rev-parse --abbrev-ref HEAD
 }
 
-function print_branch_link () {
+function print_banner () {
     local branch=$(get_current_branch)
     local remote=$(get_remote)
     local platform=$(get_platform $remote)
-    local url=$(get_repository_url $remote)
+    local url=$(get_url $remote repository)
     local link="$url/tree/$branch"
 
     if [[ $platform == "dev.azure.com" ]]; then
         local link="$url?version=GB$branch"
     fi
     echo
+    echo -n "["
     print_link $link "$branch on $platform"
-    echo -n " [ "
+    echo -n "] | "
     print_link $url "default branch"
+    echo
+    echo
+}
+
+function print_push_links() {
+    local remote=$(get_remote)
+    local platform=$(get_platform $remote)
+    local url=''
+
+    [[ $platform == "github.com" ]] && url=$(get_url $remote repository)
+    [[ $platform == "gitlab.com" ]] && url=$(get_url $remote repository)
+    [[ $platform == "dev.azure.com" ]] && url=$(get_url $remote project)
+
+    [[ $platform == "github.com" ]] && pipeline_url="$url/actions"
+    [[ $platform == "gitlab.com" ]] && pipeline_url="$url/-/pipelines"
+    [[ $platform == "dev.azure.com" ]] && pipeline_url="$url/_build"
+
+    echo
+    echo -n "[ "
+    print_link $pipeline_url "Pipelines page"
     echo " ]"
     echo
 }
@@ -154,7 +192,7 @@ function get_remote () {
 
 function log () {
     local remote=$(get_remote)
-    local repository_url=$(get_repository_url $remote)
+    local repository_url=$(get_url repository)
     local platform=$(get_platform $remote)
 
     # todo: handle the case where the remote is not a git repository
@@ -201,4 +239,5 @@ function log () {
 }
 
 [[ $1 == 'log' ]] && log | less
-[[ $1 == 'status' ]] && print_branch_link
+[[ $1 == 'status' ]] && print_banner
+[[ $1 == 'push' ]] && print_push_links
