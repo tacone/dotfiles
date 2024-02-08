@@ -192,7 +192,7 @@ function get_remote () {
 
 function log () {
     local remote=$(get_remote)
-    local repository_url=$(get_url repository)
+    local repository_url=$(get_url $remote repository)
     local platform=$(get_platform $remote)
 
     # todo: handle the case where the remote is not a git repository
