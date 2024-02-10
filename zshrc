@@ -41,6 +41,8 @@ PATH="$NPM_PACKAGES/bin:$PATH"
 unset MANPATH # delete if you already modified MANPATH elsewhere in your config
 MANPATH="$NPM_PACKAGES/share/man:$(manpath)"
 
+type nc > /dev/null && nc -w1 -z localhost 4873 && export NPM_CONFIG_REGISTRY=http://localhost:4873
+
 # export MANPATH="/usr/local/man:$MANPATH"
 
 source $ZSH/oh-my-zsh.sh
