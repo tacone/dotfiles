@@ -53,24 +53,24 @@ alias git-ls='git ls-tree -r $(git rev-parse --abbrev-ref HEAD) --name-only'
 alias find='noglob find'
 
 parent-find() {
-  local file="$1"
-  local dir="${2:-$(pwd)}"
+    local file="$1"
+    local dir="${2:-$(pwd)}"
 
-  while [[ "$dir" != "/" ]]; do
-    if [[ -e "$dir/$file" ]]; then
-      echo "$dir/$file"
-      return 0
+    while [[ "$dir" != "/" ]]; do
+        if [[ -e "$dir/$file" ]]; then
+            echo "$dir/$file"
+            return 0
+        fi
+        dir="$(dirname "$dir")"
+    done
+
+    # Check the root directory as a last resort
+    if [[ -e "/$file" ]]; then
+        echo "/$file"
+        return 0
     fi
-    dir="$(dirname "$dir")"
-  done
 
-  # Check the root directory as a last resort
-  if [[ -e "/$file" ]]; then
-    echo "/$file"
-    return 0
-  fi
-
-  return 1
+    return 1
 }
 
 alias €='noglob €'
@@ -83,12 +83,12 @@ alias qr='qrencode -t utf8 -m2'
 
 # output everything before a string (not included)
 before() {
-	grep -i -B10000 "$@" | head -n -1
+    grep -i -B10000 "$@" | head -n -1
 }
 
 # output everything adter a string (not included)
 after() {
-	grep -i -A10000 "$@" | tail -n +2
+    grep -i -A10000 "$@" | tail -n +2
 }
 
 # remove empty lines
@@ -251,7 +251,7 @@ alias docker-list-dangling-volumes='docker volume ls -f dangling=true'
 alias docker-remove-dangling-volumes='docker volume rm $(docker volume ls -q -f dangling=true)'
 
 git_http_to_ssh(){
-   echo $1 | sed 's#^https://#git@#g' | sed -E 's#(^git@[^/]+)/(.*)#\1:\2#g'
+    echo $1 | sed 's#^https://#git@#g' | sed -E 's#(^git@[^/]+)/(.*)#\1:\2#g'
 }
 
 # --- Paths
@@ -262,16 +262,16 @@ _refresh_paths='export PATH=$STANDARD_PATH; [[ -f $HOME/.paths ]] && source $HOM
 #[[ -f $HOME/.paths ]] && source $HOME/.paths;
 
 function add-path (){
-  local normpath
+    local normpath
 
-  # expand the path (for example `~` -> `/home/youruser`)
-  normpath=${~1}
-  # transform into absolute path
-  normpath=${normpath:a}
+    # expand the path (for example `~` -> `/home/youruser`)
+    normpath=${~1}
+    # transform into absolute path
+    normpath=${normpath:a}
 
-  normpath=$(echo $normpath | sed "s|$HOME|"'$HOME|')
-  echo 'export PATH='"$normpath"':$PATH' >> $HOME/.paths;
-  eval $_refresh_paths
+    normpath=$(echo $normpath | sed "s|$HOME|"'$HOME|')
+    echo 'export PATH='"$normpath"':$PATH' >> $HOME/.paths;
+    eval $_refresh_paths
 }
 alias edit-path='$EDITOR $HOME/.paths; eval $_refresh_paths'
 
@@ -287,9 +287,9 @@ bindkey -M menuselect "+" accept-and-menu-complete
 
 export _SEP='';
 multiline () {
-[ $_SEP ] && _SEP='' || _SEP='\\\n  ';
-[ $_SEP ] && echo 'multiline on' || echo 'multiline off';
-_bind_custom_keys;
+    [ $_SEP ] && _SEP='' || _SEP='\\\n  ';
+    [ $_SEP ] && echo 'multiline on' || echo 'multiline off';
+    _bind_custom_keys;
 }
 
 custom_nnn() {
@@ -415,11 +415,16 @@ function gh() {
 }
 
 function gitignore.io() {
-	curl -L -s https://www.gitignore.io/api/$@ ;
+    curl -L -s https://www.gitignore.io/api/$@ ;
 }
 
 function git-make-date() {
-    LC_ALL=C git log --all | grep -i "Date:   " | tail +2 | head -1 | sed -s 's/Date://g' | sed -s 's/+0200/CEST/g' | sed "s/\(^ *\| *\$\)//g" | LC_ALL=C xargs -n1 -d "\n" -I {} date -d'{} +'$(shuf -i 12-40 -n 1)' minutes'
+    local skip="${1:-1}"
+    local range="${2:-12-40}"
+    local base rand
+    base=$(git log --all --skip="$skip" -1 --format=%cI) || { echo "No commit found" >&2; return 1; }
+    rand=$(shuf -i "$range" -n1)
+    LC_TIME=C date -d "${base} +${rand} minutes"
 }
 
 function git-change-date() {
@@ -433,8 +438,8 @@ function filewatch() {
     # TODO: optional notify-send
     local time=${FILEWATCH_SLEEP_TIME:-0}
     echo "${@:2}"
-   "${@:2}"
-   while inotifywait -r -e close_write ${~1}; do sleep $time; ${@:2}; done;
+    "${@:2}"
+    while inotifywait -r -e close_write ${~1}; do sleep $time; ${@:2}; done;
 }
 
 alias filewatch='noglob filewatch'
@@ -454,46 +459,18 @@ alias filewatch10='FILEWATCH_SLEEP_TIME=10 noglob filewatch'
 function filewatch2() {
     # TODO: kill process upon repeat
     # TODO: optional notify-send
-   "${@:2}" &
-   PID=$!
-   echo "$PID - ${@:2}"
-   while inotifywait -e close_write ${~1}; do
-       kill $PID
-       wait $PID
-       ${@:2};
-   done;
-   kill $PID
-   wait $PID
+    "${@:2}" &
+    PID=$!
+    echo "$PID - ${@:2}"
+    while inotifywait -e close_write ${~1}; do
+        kill $PID
+        wait $PID
+        ${@:2};
+    done;
+    kill $PID
+    wait $PID
 }
 
-
-_create_symfony_console_completion() {
-    symfony_command_name=$1;
-    symfony_resolved_command=`whence $1`
-    local template=''
-
-    read -d -r template <<\EOF
-    _$symfony_command_name _get_command_list () {
-        $symfony_resolved_command ....no..ansi | sed "1,/Available commands/d" | awk '/^ +[a..z]+/ { print $1 }';
-        $symfony_resolved_command ....no..ansi | sed "1,/Available commands/d" | awk '/^ +[a..z]+/ { print $1 }';
-    }
-    _$symfony_command_name () {
-        compadd `_$symfony_command_name _get_command_list`;
-    }
-    compdef "_$symfony_command_name" $symfony_command_name;
-EOF
-
-    template=${template:gs/../-}
-    template=${template:gs/'$symfony_resolved_command'/$symfony_resolved_command}
-    template=${template:gs/'$symfony_command_name'/$symfony_command_name}
-    template=${template:gs/' _get_command_list'/_get_command_list}
-
-    eval $template
-}
-
-_create_symfony_console_completion phpcomposer
-alias artisan='php artisan'
-_create_symfony_console_completion artisan
 
 ask-yn()
 {
@@ -532,7 +509,7 @@ _tr_error=0
 TIME_REPORT_THRESHOLD=${TIME_REPORT_THRESHOLD:=10}
 
 function precmd() {
-  _tr_error=$?
+    _tr_error=$?
 }
 
 function preexec_start_timer() {
@@ -549,8 +526,8 @@ function precmd_report_time() {
     local _status
 
     if [[ ${_tr_error} != 0 ]] ; then
-      icon='🔴'
-      _status=" [status: ${_tr_error}]";
+        icon='🔴'
+        _status=" [status: ${_tr_error}]";
     fi
 
 
@@ -558,9 +535,9 @@ function precmd_report_time() {
     if [[ "x${_tr_ignored}" = "x" && $te -gt $TIME_REPORT_THRESHOLD ]] ; then
         _tr_ignored="yes"
         echo "\n${icon} \`${_tr_current_cmd}\` completed in ${te} seconds."
-	if type notify-send > /dev/null; then
-        	notify-send "${icon} \`${_tr_current_cmd}\` completed in <b>${te}</b> seconds.${_status}"
-	fi
+        if type notify-send > /dev/null; then
+            notify-send "${icon} \`${_tr_current_cmd}\` completed in <b>${te}</b> seconds.${_status}"
+        fi
     fi
 }
 
@@ -581,18 +558,18 @@ eval $_refresh_paths
 # fi
 
 if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
-        if [ -f /etc/profile.d/vte.sh ]; then
-            source /etc/profile.d/vte.sh
+    if [ -f /etc/profile.d/vte.sh ]; then
+        source /etc/profile.d/vte.sh
         elif [ -f /etc/profile.d/vte-2.90.sh ]; then
-            source /etc/profile.d/vte-2.90.sh
-        fi
+        source /etc/profile.d/vte-2.90.sh
+    fi
 fi
 
 # --- Command not found handler
 
 # # Manjaro: offer to install missing package if command is not found
 # if [[ -r /usr/share/zsh/functions/command-not-found.zsh ]]; then
-    # source /usr/share/zsh/functions/command-not-found.zsh
+# source /usr/share/zsh/functions/command-not-found.zsh
 command_not_found_handler() {
     local pkgs cmd="$1"
 
@@ -605,11 +582,11 @@ command_not_found_handler() {
         pkgname="${${(@s:/:)pkg_array}[2]}"
         printf 'Do you want to Install package %s? (y/N) ' $pkgname
         if read -q "choice? "; then
-                echo
-                echo "Executing command: pamac install --no-upgrade $pkgname"
-                pamac install --no-upgrade $pkgname
+            echo
+            echo "Executing command: pamac install --no-upgrade $pkgname"
+            pamac install --no-upgrade $pkgname
         else
-                echo " "
+            echo " "
         fi
     else
         printf 'zsh: command not found: %s\n' "$cmd"
@@ -621,7 +598,7 @@ export PKGFILE_PROMPT_INSTALL_MISSING=1
 # fi
 # /--- Command not found handler
 
-export PATH=./scripts:/home/stefano/.local/bin:$PATH
+export PATH=./scripts:$HOME/.local/bin:$PATH
 
 # --- options override
 
@@ -634,8 +611,27 @@ if  [[ "$TERM_PROGRAM" != "vscode" ]]; then
         local matrix_selected_color=${matrix_colors[ 1 + $RANDOM % ${#matrix_colors[@]} ]}
         local matrix_message=$(type fortune > /dev/null && fortune || echo '' -n)
         neo-matrix -D -s -M 1 -m "$matrix_message" --color $matrix_selected_color || true
-    elif type cmatrix > /dev/null; then
+        elif type cmatrix > /dev/null; then
         cmatrix -s; read -k1 -s || true
     fi
 fi
 
+
+# pnpm
+export PNPM_HOME="$HOME/.local/share/pnpm"
+case ":$PATH:" in
+    *":$PNPM_HOME:"*) ;;
+    *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
+
+# Load private environment variables
+[[ -f "$HOME/.env.private" ]] && source "$HOME/.env.private"
+
+
+# bun completions
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
