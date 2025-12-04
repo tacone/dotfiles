@@ -1,0 +1,105 @@
+#!/bin/bash
+
+EMAIL="$1"
+
+if [ -z "$EMAIL" ]; then
+    echo "Usage: check-email <email@domain.com>"
+    exit 1
+fi
+
+# Extract domain
+DOMAIN="${EMAIL#*@}"
+
+echo "=== Checking email: $EMAIL ==="
+echo
+
+# Step 1: Check MX records
+echo "Step 1: DNS MX Record Check"
+echo "----------------------------"
+MX_RESULT=$(curl -s "https://dns.google/resolve?name=$DOMAIN&type=MX" | python3 -c "import sys,json; data=json.load(sys.stdin); print('\n'.join([ans.get('data','') for ans in data.get('Answer',[])]))" 2>/dev/null)
+
+if [ -z "$MX_RESULT" ]; then
+    echo "❌ No MX records found for $DOMAIN"
+    echo "Result: Domain cannot receive email"
+    exit 1
+fi
+
+echo "✅ MX records found:"
+echo "$MX_RESULT"
+
+# Extract first MX server (remove priority number)
+MX_SERVER=$(echo "$MX_RESULT" | head -1 | awk '{print $NF}' | sed 's/\.$//')
+echo "Using MX server: $MX_SERVER"
+echo
+
+# Step 2: Check catch-all with random address
+echo "Step 2: Catch-All Detection"
+echo "----------------------------"
+RANDOM_EMAIL="test$(date +%s)random12345@$DOMAIN"
+
+CATCHALL_CHECK=$(nc -w 10 "$MX_SERVER" 25 <<EOF
+HELO check.yeldo.com
+MAIL FROM:<noreply@yeldo.com>
+RCPT TO:<$RANDOM_EMAIL>
+QUIT
+EOF
+)
+
+echo "Testing random address: $RANDOM_EMAIL"
+
+IS_CATCHALL=false
+if echo "$CATCHALL_CHECK" | grep -q "250.*recipient ok\|250 2.1.5"; then
+    echo "⚠️  Domain accepts all addresses (catch-all detected)"
+    IS_CATCHALL=true
+elif echo "$CATCHALL_CHECK" | grep -q "550\|551\|553"; then
+    echo "✅ Domain rejects invalid addresses (good for verification)"
+else
+    echo "⚠️  Unclear catch-all status"
+fi
+echo
+
+# Step 3: Check actual email address
+echo "Step 3: SMTP RCPT TO Verification"
+echo "-----------------------------------"
+SMTP_CHECK=$(nc -w 10 "$MX_SERVER" 25 <<EOF
+HELO check.yeldo.com
+MAIL FROM:<noreply@yeldo.com>
+RCPT TO:<$EMAIL>
+QUIT
+EOF
+)
+
+echo "Testing: $EMAIL"
+echo
+
+if echo "$SMTP_CHECK" | grep -q "250.*recipient ok\|250 2.1.5"; then
+    if [ "$IS_CATCHALL" = true ]; then
+        echo "⚠️  MAILBOX ACCEPTED (but domain is catch-all)"
+        echo "Result: Cannot confirm if mailbox truly exists"
+        exit 0
+    else
+        echo "✅ MAILBOX EXISTS"
+        echo "Server accepted recipient"
+        exit 0
+    fi
+elif echo "$SMTP_CHECK" | grep -q "550\|551\|553"; then
+    ERROR=$(echo "$SMTP_CHECK" | grep "550\|551\|553" | head -1)
+    if [ "$IS_CATCHALL" = true ]; then
+        echo "⚠️  MAILBOX REJECTED (unexpected - domain is catch-all)"
+        echo "Server response: $ERROR"
+        exit 1
+    else
+        echo "❌ MAILBOX DOES NOT EXIST"
+        echo "Server response: $ERROR"
+        exit 1
+    fi
+elif echo "$SMTP_CHECK" | grep -q "450\|451\|452"; then
+    echo "⚠️  TEMPORARY ERROR (greylisting/rate limit)"
+    echo "Result: Cannot verify at this time"
+    exit 2
+else
+    echo "⚠️  UNKNOWN RESPONSE"
+    echo "Full response:"
+    echo "$SMTP_CHECK"
+    exit 3
+fi
