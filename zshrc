@@ -401,13 +401,13 @@ function find-port() {
     else
         local highlight=(cat -)
     fi
-    local output=$(sudo lsof -n -i :${1})
+    local output=$(lsof -n -i :${1})
     echo "$output" | head -n1 1>&2
     echo "$output" | grep LISTEN | $highlight
 }
 
 function kill-port() {
-    find-port $1 2> /dev/null | awk '{print $2}' | xargs sudo kill ${@:2}
+    find-port $1 2> /dev/null | awk '{print $2}' | xargs kill ${@:2}
 }
 
 function gh() {
@@ -470,6 +470,8 @@ function filewatch2() {
     kill $PID
     wait $PID
 }
+
+alias highlight='rg --passthru --color=always';
 
 
 ask-yn()
